@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Badge } from "@/components/ui/badge"
-import { X, Send, Building, User, MessageSquare } from "lucide-react"
+import { X, Send} from "lucide-react"
 
 export default function EnquiryModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
   const [formData, setFormData] = useState({
@@ -117,7 +117,7 @@ export default function EnquiryModal({ isOpen, onClose }: { isOpen: boolean; onC
               Get In Touch
             </h2>
             <p className="text-gray-600 text-sm mt-2 group-hover:text-gray-800 transition-colors duration-300">
-              Fill out the form and we'll get back to you soon
+              Fill out the form and we&apos;ll get back to you soon
             </p>
           </div>
 

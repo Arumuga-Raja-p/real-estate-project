@@ -7,8 +7,16 @@ import { Label } from "@/components/ui/label";
 import { Slider } from "@/components/ui/slider";
 import { motion } from "framer-motion";
 
+// ✅ Define type for filters
+interface Filters {
+  type: "all" | "house" | "apartment";
+  priceRange: number[];
+  bedrooms: "any" | "1" | "2" | "3" | "4";
+  location: "all" | "downtown" | "suburban" | "waterfront" | "hills";
+}
+
 interface PropertyFiltersProps {
-  onFilterChange: (filters: any) => void;
+  onFilterChange: (filters: Filters) => void;
   isRental?: boolean;
 }
 
@@ -16,21 +24,21 @@ export function PropertyFilters({
   onFilterChange,
   isRental = false,
 }: PropertyFiltersProps) {
-  const [filters, setFilters] = useState({
+  const [filters, setFilters] = useState<Filters>({
     type: "all",
     priceRange: isRental ? [1000, 5000] : [200000, 1500000],
     bedrooms: "any",
     location: "all",
   });
 
-  const handleFilterChange = (key: string, value: any) => {
+  const handleFilterChange = <K extends keyof Filters>(key: K, value: Filters[K]) => {
     const newFilters = { ...filters, [key]: value };
     setFilters(newFilters);
     onFilterChange(newFilters);
   };
 
   const resetFilters = () => {
-    const defaultFilters = {
+    const defaultFilters: Filters = {
       type: "all",
       priceRange: isRental ? [1000, 5000] : [200000, 1500000],
       bedrooms: "any",
@@ -41,7 +49,7 @@ export function PropertyFilters({
   };
 
   return (
-    <Card className="sticky top-24 border-2 border-gray-200 shadow-lg hover:shadow-2xl hover:border-green-500 transition-all duration-500 bg-white group overflow-hidden relative">
+    <Card className="top-24 border-2 border-gray-200 shadow-lg hover:shadow-2xl hover:border-green-500 transition-all duration-500 bg-white group overflow-hidden relative">
       {/* Animated Background Gradient */}
       <div className="absolute inset-0 bg-gradient-to-br from-green-50 via-transparent to-blue-50 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
       
@@ -81,7 +89,9 @@ export function PropertyFilters({
                   name="type"
                   value={option.value}
                   checked={filters.type === option.value}
-                  onChange={(e) => handleFilterChange("type", e.target.value)}
+                  onChange={(e) =>
+                    handleFilterChange("type", e.target.value as Filters["type"])
+                  }
                   className="text-green-600 focus:ring-green-500 w-4 h-4 cursor-pointer"
                 />
                 <span className="text-sm font-medium text-gray-700 group-hover/item:text-green-600 transition-colors duration-200">
@@ -137,7 +147,9 @@ export function PropertyFilters({
           </Label>
           <select
             value={filters.bedrooms}
-            onChange={(e) => handleFilterChange("bedrooms", e.target.value)}
+            onChange={(e) =>
+              handleFilterChange("bedrooms", e.target.value as Filters["bedrooms"])
+            }
             className="w-full px-3 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 hover:border-green-400 transition-all duration-300 bg-white cursor-pointer shadow-sm hover:shadow-md font-medium text-gray-700"
           >
             <option value="any">Any</option>
@@ -159,7 +171,9 @@ export function PropertyFilters({
           </Label>
           <select
             value={filters.location}
-            onChange={(e) => handleFilterChange("location", e.target.value)}
+            onChange={(e) =>
+              handleFilterChange("location", e.target.value as Filters["location"])
+            }
             className="w-full px-3 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 hover:border-green-400 transition-all duration-300 bg-white cursor-pointer shadow-sm hover:shadow-md font-medium text-gray-700"
           >
             <option value="all">All Locations</option>

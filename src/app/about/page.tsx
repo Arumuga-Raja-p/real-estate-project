@@ -174,7 +174,7 @@ export default function AboutPage() {
                       className="text-lg text-gray-600 leading-relaxed"
                     >
                       Since 2003, Green Home has been more than just a real
-                      estate company— we've been a trusted partner helping
+                      estate company— we&apos;ve been a trusted partner helping
                       families, investors, and businesses turn their dreams into
                       reality.
                     </motion.p>
@@ -327,8 +327,8 @@ export default function AboutPage() {
                   className="w-6 h-6 rounded-full bg-gradient-to-r from-green-400 to-blue-500 flex-shrink-0"
                 />
                 <p className="text-lg md:text-xl text-gray-700 italic font-light">
-                  "Our mission is simple: to make every real estate journey
-                  memorable, transparent, and successful."
+                  Our mission is simple: to make every real estate journey
+                  memorable, transparent, and successful.
                 </p>
                 <motion.div
                   animate={{ rotate: -360 }}
