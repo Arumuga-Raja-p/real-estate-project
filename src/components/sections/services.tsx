@@ -131,25 +131,26 @@ export function Services() {
               transition={{ duration: 0.6, delay: index * 0.1 }}
               viewport={{ once: true }}
             >
-              <Card className="card-hover-effect group">
-
-                <CardHeader>
-                  <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center mb-4 group-hover:bg-green-600 transition-colors">
-                    <service.icon className="w-5 h-5 text-green-600 group-hover:text-white transition-colors" />
+              <Card className="h-full border border-gray-200 bg-white shadow-md hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 group overflow-hidden relative">
+                <div className="absolute inset-0 bg-gradient-to-br from-green-50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                
+                <CardHeader className="relative z-10">
+                  <div className="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center mb-4 group-hover:bg-green-600 group-hover:scale-110 transition-all duration-300 shadow-sm group-hover:shadow-lg">
+                    <service.icon className="w-6 h-6 text-green-600 group-hover:text-white transition-colors duration-300" />
                   </div>
-                  <CardTitle className="text-lg">{service.title}</CardTitle>
+                  <CardTitle className="text-lg font-semibold text-gray-900 group-hover:text-green-700 transition-colors duration-300">{service.title}</CardTitle>
                 </CardHeader>
-                <CardContent className="space-y-4"> 
-                  <p className="text-gray-600 text-[14px]">{service.description}</p>
+                
+                <CardContent className="space-y-4 relative z-10"> 
+                  <p className="text-gray-600 text-[14px] leading-relaxed">{service.description}</p>
                   <ul className="space-y-2">
                     {service.features.map((feature, featureIndex) => (
-                      <li key={featureIndex} className="flex items-center text-sm text-gray-600">
-                        <div className="w-2 h-2 bg-green-600 rounded-full mr-3" />
+                      <li key={featureIndex} className="flex items-center text-sm text-gray-600 group-hover:text-gray-700 transition-colors duration-300">
+                        <div className="w-2 h-2 bg-green-600 rounded-full mr-3 group-hover:scale-125 transition-transform duration-300" />
                         {feature}
                       </li>
                     ))}
                   </ul>
-                  
                 </CardContent>
               </Card>
             </motion.div>

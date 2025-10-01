@@ -1,7 +1,7 @@
 "use client"
 
-import { useState, useRef, useEffect } from "react"
-import { motion } from "framer-motion"
+import { useState } from "react"
+import { motion, AnimatePresence } from "framer-motion"
 import { ChevronLeft, ChevronRight, ArrowRight } from "lucide-react"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
@@ -47,74 +47,96 @@ const featuredProperties = [
     status: "for-sale",
     featured: true,
   },
-    {
+  {
     id: 4,
-    title: "Executive Penthouse",
-    price: 1200000,
-    location: "Skyline Tower",
+    title: "Coastal Beach House",
+    price: 950000,
+    location: "Seaside Avenue",
     bedrooms: 3,
-    bathrooms: 3,
-    area: 2200,
-    image: "/galary/3.jpg",
-    type: "apartment",
+    bathrooms: 2,
+    area: 1800,
+    image: "/galary/4.jpg",
+    type: "house",
     status: "for-sale",
     featured: true,
   },
-    {
+  {
     id: 5,
-    title: "Executive Penthouse",
-    price: 1200000,
-    location: "Skyline Tower",
-    bedrooms: 3,
-    bathrooms: 3,
-    area: 2200,
-    image: "/galary/3.jpg",
+    title: "Urban Loft Studio",
+    price: 380000,
+    location: "Arts District",
+    bedrooms: 1,
+    bathrooms: 1,
+    area: 900,
+    image: "/galary/5.jpg",
     type: "apartment",
     status: "for-sale",
     featured: true,
   },
-  // Add more if needed
 ]
 
 export function FeaturedProperties() {
-  const scrollRef = useRef<HTMLDivElement>(null)
-  const [showLeft, setShowLeft] = useState(false)
-  const [showRight, setShowRight] = useState(true)
+  const [currentIndex, setCurrentIndex] = useState(0)
+  const [direction, setDirection] = useState(0)
 
-  const checkScroll = () => {
-    if (!scrollRef.current) return
-    const { scrollLeft, scrollWidth, clientWidth } = scrollRef.current
-    setShowLeft(scrollLeft > 0)
-    setShowRight(scrollLeft < scrollWidth - clientWidth - 10)
+  const slideVariants = {
+    enter: (direction: number) => ({
+      x: direction > 0 ? 1000 : -1000,
+      opacity: 0,
+    }),
+    center: {
+      x: 0,
+      opacity: 1,
+    },
+    exit: (direction: number) => ({
+      x: direction < 0 ? 1000 : -1000,
+      opacity: 0,
+    }),
   }
 
-  useEffect(() => {
-    const container = scrollRef.current
-    if (!container) return
-    checkScroll()
-    container.addEventListener("scroll", checkScroll)
-    window.addEventListener("resize", checkScroll)
-    return () => {
-      container.removeEventListener("scroll", checkScroll)
-      window.removeEventListener("resize", checkScroll)
-    }
-  }, [])
+  const swipeConfidenceThreshold = 10000
+  const swipePower = (offset: number, velocity: number) => {
+    return Math.abs(offset) * velocity
+  }
 
-  const scroll = (direction: "left" | "right") => {
-    if (!scrollRef.current) return
-    const { clientWidth } = scrollRef.current
-    const scrollAmount = clientWidth * 0.8
-    scrollRef.current.scrollBy({
-      left: direction === "left" ? -scrollAmount : scrollAmount,
-      behavior: "smooth",
+  const paginate = (newDirection: number) => {
+    setDirection(newDirection)
+    setCurrentIndex((prevIndex) => {
+      if (newDirection === 1) {
+        return prevIndex === featuredProperties.length - 1 ? 0 : prevIndex + 1
+      } else {
+        return prevIndex === 0 ? featuredProperties.length - 1 : prevIndex - 1
+      }
     })
+  }
+
+  // Calculate visible properties based on screen size
+  const getVisibleCount = () => {
+    if (typeof window !== 'undefined') {
+      if (window.innerWidth >= 1024) return 3
+      if (window.innerWidth >= 768) return 2
+      return 1
+    }
+    return 3
+  }
+
+  const [visibleCount] = useState(getVisibleCount())
+
+  // Get properties to display
+  const getVisibleProperties = () => {
+    const visible = []
+    for (let i = 0; i < visibleCount; i++) {
+      const index = (currentIndex + i) % featuredProperties.length
+      visible.push(featuredProperties[index])
+    }
+    return visible
   }
 
   return (
     <section className="py-20 bg-gray-50 relative overflow-hidden">
       <div className="container mx-auto px-4">
         <motion.div
-          initial={{ opacity: 0, y: 20 }} 
+          initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
           viewport={{ once: true }}
@@ -126,45 +148,86 @@ export function FeaturedProperties() {
           </p>
         </motion.div>
 
-        {/* Arrows */}
-        {showLeft && (
+        {/* Carousel Container */}
+        <div className="relative max-w-7xl mx-auto">
+          {/* Left Arrow */}
           <Button
             variant="outline"
             size="icon"
-            onClick={() => scroll("left")}
-            className="absolute left-2 top-1/2 -translate-y-1/2 z-10 bg-white/80 backdrop-blur border shadow-md"
+            onClick={() => paginate(-1)}
+            className="absolute left-0 lg:-left-16 top-1/2 -translate-y-1/2 z-20 bg-white hover:bg-green-50 border-2 border-gray-200 hover:border-green-600 shadow-lg hover:shadow-xl transition-all duration-300 w-12 h-12 rounded-full"
           >
-            <ChevronLeft className="w-5 h-5" />
+            <ChevronLeft className="w-6 h-6 text-gray-700" />
           </Button>
-        )}
-        {showRight && (
-          <Button
-            variant="outline"
-            size="icon"
-            onClick={() => scroll("right")}
-            className="absolute right-2 top-1/2 -translate-y-1/2 z-10 bg-white/80 backdrop-blur border shadow-md"
-          >
-            <ChevronRight className="w-5 h-5" />
-          </Button>
-        )}
 
-        {/* Scrollable Cards */}
-        <div
-          ref={scrollRef}
-          className="overflow-x-auto hide-scrollbar pb-6"
-        >
-          <div className="flex space-x-6 px-4 w-max">
-            {featuredProperties.map((property, index) => (
+          {/* Right Arrow */}
+          <Button
+            variant="outline"
+            size="icon"
+            onClick={() => paginate(1)}
+            className="absolute right-0 lg:-right-16 top-1/2 -translate-y-1/2 z-20 bg-white hover:bg-green-50 border-2 border-gray-200 hover:border-green-600 shadow-lg hover:shadow-xl transition-all duration-300 w-12 h-12 rounded-full"
+          >
+            <ChevronRight className="w-6 h-6 text-gray-700" />
+          </Button>
+
+          {/* Properties Display */}
+          <div className="overflow-hidden px-4">
+            <AnimatePresence initial={false} custom={direction} mode="wait">
               <motion.div
-                key={property.id}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: index * 0.1 }}
-                viewport={{ once: true }}
-                className="flex-shrink-0 w-[300px] sm:w-[350px] md:w-[400px]"
+                key={currentIndex}
+                custom={direction}
+                variants={slideVariants}
+                initial="enter"
+                animate="center"
+                exit="exit"
+                transition={{
+                  x: { type: "spring", stiffness: 300, damping: 30 },
+                  opacity: { duration: 0.3 },
+                }}
+                drag="x"
+                dragConstraints={{ left: 0, right: 0 }}
+                dragElastic={1}
+                onDragEnd={(e, { offset, velocity }) => {
+                  const swipe = swipePower(offset.x, velocity.x)
+
+                  if (swipe < -swipeConfidenceThreshold) {
+                    paginate(1)
+                  } else if (swipe > swipeConfidenceThreshold) {
+                    paginate(-1)
+                  }
+                }}
+                className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
               >
-                <PropertyCard property={property} />
+                {getVisibleProperties().map((property, index) => (
+                  <motion.div
+                    key={`${property.id}-${currentIndex}-${index}`}
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ delay: index * 0.1, duration: 0.4 }}
+                  >
+                    <PropertyCard property={property} />
+                  </motion.div>
+                ))}
               </motion.div>
+            </AnimatePresence>
+          </div>
+
+          {/* Dots Indicator */}
+          <div className="flex justify-center gap-2 mt-8">
+            {featuredProperties.map((_, index) => (
+              <button
+                key={index}
+                onClick={() => {
+                  setDirection(index > currentIndex ? 1 : -1)
+                  setCurrentIndex(index)
+                }}
+                className={`h-2 rounded-full transition-all duration-300 ${
+                  index === currentIndex
+                    ? "w-8 bg-green-600"
+                    : "w-2 bg-gray-300 hover:bg-gray-400"
+                }`}
+                aria-label={`Go to slide ${index + 1}`}
+              />
             ))}
           </div>
         </div>
@@ -175,10 +238,10 @@ export function FeaturedProperties() {
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.4 }}
           viewport={{ once: true }}
-          className="text-center mt-10"
+          className="text-center mt-12"
         >
           <Link href="/properties">
-            <Button size="lg" className="bg-green-600 hover:bg-green-700">
+            <Button size="lg" className="bg-green-600 hover:bg-green-700 shadow-lg hover:shadow-xl transition-all duration-300">
               View All Properties
               <ArrowRight className="w-5 h-5 ml-2" />
             </Button>
@@ -188,5 +251,3 @@ export function FeaturedProperties() {
     </section>
   )
 }
-
-
