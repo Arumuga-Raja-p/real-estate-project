@@ -107,8 +107,165 @@ export default function ContactPage() {
     <RootLayout>
       <div className="pt-20">
         {/* Hero Section */}
-        <section className="py-20 bg-gradient-to-br from-slate-50 via-white to-emerald-50">
-          <div className="container mx-auto px-4">
+        <section className="py-20 relative overflow-hidden">
+          {/* Animated Gradient Background */}
+          <div className="absolute inset-0 bg-gradient-to-br from-green-50 via-blue-50 to-emerald-50">
+            {/* Animated gradient overlay */}
+            <motion.div
+              className="absolute inset-0 bg-gradient-to-r from-green-200/30 via-transparent to-blue-200/30"
+              animate={{
+                backgroundPosition: ["0% 0%", "100% 100%", "0% 0%"],
+              }}
+              transition={{
+                duration: 8,
+                repeat: Infinity,
+                ease: "linear",
+              }}
+              style={{
+                backgroundSize: "200% 200%",
+              }}
+            />
+
+            {/* Floating Home SVGs */}
+            <motion.div
+              className="absolute top-20 left-10 opacity-10"
+              animate={{
+                y: [0, -20, 0],
+                rotate: [0, 5, 0],
+              }}
+              transition={{
+                duration: 6,
+                repeat: Infinity,
+                ease: "easeInOut",
+              }}
+            >
+              <svg
+                width="60"
+                height="60"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+                className="text-green-400"
+              >
+                <path d="M19 9.3V4h-3v2.6L12 3 2 12h3v8h5v-6h4v6h5v-8h3l-3-2.7zm-9 .7c0-1.1.9-2 2-2s2 .9 2 2h-4z" />
+              </svg>
+            </motion.div>
+
+            <motion.div
+              className="absolute top-40 right-20 opacity-10"
+              animate={{
+                y: [0, 15, 0],
+                rotate: [0, -3, 0],
+              }}
+              transition={{
+                duration: 7,
+                repeat: Infinity,
+                ease: "easeInOut",
+                delay: 1,
+              }}
+            >
+              <svg
+                width="40"
+                height="40"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+                className="text-green-400"
+              >
+                <path d="M19 9.3V4h-3v2.6L12 3 2 12h3v8h5v-6h4v6h5v-8h3l-3-2.7zm-9 .7c0-1.1.9-2 2-2s2 .9 2 2h-4z" />
+              </svg>
+            </motion.div>
+
+            <motion.div
+              className="absolute bottom-20 left-20 opacity-10"
+              animate={{
+                y: [0, -15, 0],
+                rotate: [0, 8, 0],
+              }}
+              transition={{
+                duration: 5,
+                repeat: Infinity,
+                ease: "easeInOut",
+                delay: 2,
+              }}
+            >
+              <svg
+                width="50"
+                height="50"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+                className="text-green-400"
+              >
+                <path d="M19 9.3V4h-3v2.6L12 3 2 12h3v8h5v-6h4v6h5v-8h3l-3-2.7zm-9 .7c0-1.1.9-2 2-2s2 .9 2 2h-4z" />
+              </svg>
+            </motion.div>
+
+            <motion.div
+              className="absolute bottom-40 right-10 opacity-10"
+              animate={{
+                y: [0, 10, 0],
+                rotate: [0, -5, 0],
+              }}
+              transition={{
+                duration: 6,
+                repeat: Infinity,
+                ease: "easeInOut",
+                delay: 3,
+              }}
+            >
+              <svg
+                width="45"
+                height="45"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+                className="text-green-300"
+              >
+                <path d="M19 9.3V4h-3v2.6L12 3 2 12h3v8h5v-6h4v6h5v-8h3l-3-2.7zm-9 .7c0-1.1.9-2 2-2s2 .9 2 2h-4z" />
+              </svg>
+            </motion.div>
+
+            {/* Floating Circles */}
+            <motion.div
+              animate={{
+                scale: [1, 1.2, 1],
+                opacity: [0.3, 0.6, 0.3],
+              }}
+              transition={{
+                duration: 4,
+                repeat: Infinity,
+                ease: "easeInOut",
+              }}
+              className="absolute top-1/4 right-1/4 w-32 h-32 rounded-full bg-green-200 blur-xl"
+            />
+
+            <motion.div
+              animate={{
+                scale: [1.2, 1, 1.2],
+                opacity: [0.4, 0.2, 0.4],
+              }}
+              transition={{
+                duration: 5,
+                repeat: Infinity,
+                ease: "easeInOut",
+                delay: 2,
+              }}
+              className="absolute bottom-1/3 left-1/4 w-40 h-40 rounded-full bg-green-200 blur-xl"
+            />
+
+            <motion.div
+              animate={{
+                scale: [1, 1.1, 1],
+                opacity: [0.2, 0.4, 0.2],
+              }}
+              transition={{
+                duration: 3,
+                repeat: Infinity,
+                ease: "easeInOut",
+                delay: 1,
+              }}
+              className="absolute top-1/3 left-1/3 w-24 h-24 rounded-full bg-green-200 blur-xl"
+            />
+          </div>
+
+          <div className="container mx-auto px-4 relative z-10">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -131,7 +288,7 @@ export default function ContactPage() {
         </section>
 
         {/* Contact Info Cards */}
-        <section className="py-20 bg-white">
+        <section className="py-20">
           <div className="container mx-auto px-4">
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
               {contactInfo.map((info, index) => (
@@ -145,10 +302,10 @@ export default function ContactPage() {
                   <Card className="h-full flex flex-col text-center border-2 border-gray-100 shadow-lg hover:shadow-2xl hover:border-green-300 transition-all duration-500 group bg-white relative overflow-hidden">
                     {/* Background gradient on hover */}
                     <div className="absolute inset-0 bg-gradient-to-br from-green-50 via-transparent to-blue-50 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                    
+
                     {/* Corner accent */}
                     <div className="absolute top-0 right-0 w-12 h-12 bg-gradient-to-bl from-green-500/10 to-transparent rounded-bl-full transform scale-0 group-hover:scale-100 transition-transform duration-500" />
-                    
+
                     <CardHeader className="relative z-10">
                       <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-green-600 group-hover:scale-110 transition-all duration-300 shadow-md">
                         <info.icon className="w-8 h-8 text-green-600 group-hover:text-white transition-colors duration-300" />
@@ -178,7 +335,7 @@ export default function ContactPage() {
                         </Button>
                       </div>
                     </CardContent>
-                    
+
                     {/* Bottom accent line */}
                     <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-green-400 via-green-600 to-green-400 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-center" />
                   </Card>
@@ -198,7 +355,7 @@ export default function ContactPage() {
                 <Card className="bg-white border-2 border-gray-100 shadow-lg hover:shadow-xl transition-all duration-500 group relative overflow-hidden">
                   {/* Background gradient */}
                   <div className="absolute inset-0 bg-gradient-to-br from-green-50/50 via-transparent to-blue-50/50 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                  
+
                   <CardHeader className="relative z-10">
                     <CardTitle className="text-2xl group-hover:text-green-600 transition-colors duration-300">
                       Send Us a Message
@@ -339,7 +496,11 @@ export default function ContactPage() {
                           <span className="flex items-center justify-center">
                             <motion.div
                               animate={{ rotate: 360 }}
-                              transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+                              transition={{
+                                duration: 1,
+                                repeat: Infinity,
+                                ease: "linear",
+                              }}
                               className="w-5 h-5 border-2 border-white border-t-transparent rounded-full mr-2"
                             />
                             Sending...
@@ -363,7 +524,7 @@ export default function ContactPage() {
                 {/* Map Card */}
                 <Card className="border-2 border-gray-100 shadow-lg hover:shadow-xl transition-all duration-500 group relative overflow-hidden">
                   <div className="absolute inset-0 bg-gradient-to-br from-green-50/50 via-transparent to-blue-50/50 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                  
+
                   <CardHeader className="relative z-10">
                     <CardTitle className="text-2xl group-hover:text-green-600 transition-colors duration-300">
                       Visit Our Office
@@ -386,17 +547,29 @@ export default function ContactPage() {
                       <div className="flex items-start space-x-3 p-3 rounded-lg hover:bg-gray-50 transition-colors duration-300 group/item">
                         <MapPin className="w-5 h-5 text-green-600 mt-1 group-hover/item:scale-110 transition-transform duration-300" />
                         <div>
-                          <p className="font-medium text-gray-900">No:15, Govindarajapuram 2nd street,</p>
-                          <p className="font-medium text-gray-900">Nellikappam Road, Guduvanchery,</p>
-                          <p className="font-medium text-gray-900">Chennai-603 202</p>
+                          <p className="font-medium text-gray-900">
+                            No:15, Govindarajapuram 2nd street,
+                          </p>
+                          <p className="font-medium text-gray-900">
+                            Nellikappam Road, Guduvanchery,
+                          </p>
+                          <p className="font-medium text-gray-900">
+                            Chennai-603 202
+                          </p>
                         </div>
                       </div>
                       <div className="flex items-start space-x-3 p-3 rounded-lg hover:bg-gray-50 transition-colors duration-300 group/item">
                         <Clock className="w-5 h-5 text-green-600 mt-1 group-hover/item:scale-110 transition-transform duration-300" />
                         <div>
-                          <p className="font-medium text-gray-900">Office Hours</p>
-                          <p className="text-gray-600">Monday - Friday: 9:00 AM - 6:00 PM</p>
-                          <p className="text-gray-600">Saturday - Sunday: 10:00 AM - 4:00 PM</p>
+                          <p className="font-medium text-gray-900">
+                            Office Hours
+                          </p>
+                          <p className="text-gray-600">
+                            Monday - Friday: 9:00 AM - 6:00 PM
+                          </p>
+                          <p className="text-gray-600">
+                            Saturday - Sunday: 10:00 AM - 4:00 PM
+                          </p>
                         </div>
                       </div>
                     </div>
@@ -406,22 +579,31 @@ export default function ContactPage() {
                 {/* Quick Actions Card */}
                 <Card className="border-2 border-gray-100 shadow-lg hover:shadow-xl transition-all duration-500 group relative overflow-hidden">
                   <div className="absolute inset-0 bg-gradient-to-br from-green-50/50 via-transparent to-blue-50/50 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                  
+
                   <CardHeader className="relative z-10">
                     <CardTitle className="text-xl group-hover:text-green-600 transition-colors duration-300">
                       Quick Actions
                     </CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-3 relative z-10">
-                    <Button variant="outline" className="w-full justify-start border-gray-300 text-gray-700 hover:border-green-500 hover:text-green-600 hover:bg-green-50 transition-all duration-300 group/item">
+                    <Button
+                      variant="outline"
+                      className="w-full justify-start border-gray-300 text-gray-700 hover:border-green-500 hover:text-green-600 hover:bg-green-50 transition-all duration-300 group/item"
+                    >
                       <Calendar className="w-4 h-4 mr-2 group-hover/item:scale-110 transition-transform duration-300" />
                       Schedule Property Viewing
                     </Button>
-                    <Button variant="outline" className="w-full justify-start border-gray-300 text-gray-700 hover:border-green-500 hover:text-green-600 hover:bg-green-50 transition-all duration-300 group/item">
+                    <Button
+                      variant="outline"
+                      className="w-full justify-start border-gray-300 text-gray-700 hover:border-green-500 hover:text-green-600 hover:bg-green-50 transition-all duration-300 group/item"
+                    >
                       <User className="w-4 h-4 mr-2 group-hover/item:scale-110 transition-transform duration-300" />
                       Book Free Consultation
                     </Button>
-                    <Button variant="outline" className="w-full justify-start border-gray-300 text-gray-700 hover:border-green-500 hover:text-green-600 hover:bg-green-50 transition-all duration-300 group/item">
+                    <Button
+                      variant="outline"
+                      className="w-full justify-start border-gray-300 text-gray-700 hover:border-green-500 hover:text-green-600 hover:bg-green-50 transition-all duration-300 group/item"
+                    >
                       <Building className="w-4 h-4 mr-2 group-hover/item:scale-110 transition-transform duration-300" />
                       Property Valuation Request
                     </Button>
@@ -457,20 +639,24 @@ export default function ContactPage() {
               {[
                 {
                   question: "How quickly can you help me find a property?",
-                  answer: "We typically have new listings that match your criteria within 24-48 hours. Our average time to find the right property is 2-4 weeks."
+                  answer:
+                    "We typically have new listings that match your criteria within 24-48 hours. Our average time to find the right property is 2-4 weeks.",
                 },
                 {
                   question: "What are your commission rates?",
-                  answer: "Our commission rates are competitive and transparent. We offer different packages based on your needs, starting from 2 to 2.5% for sellers."
+                  answer:
+                    "Our commission rates are competitive and transparent. We offer different packages based on your needs, starting from 2 to 2.5% for sellers.",
                 },
                 {
                   question: "Do you offer property management services?",
-                  answer: "Yes! We offer comprehensive property management services including tenant screening, rent collection, maintenance, and more."
+                  answer:
+                    "Yes! We offer comprehensive property management services including tenant screening, rent collection, maintenance, and more.",
                 },
                 {
                   question: "Can you help with investment properties?",
-                  answer: "We specialize in investment properties and can provide market analysis, ROI calculations, and ongoing investment advice."
-                }
+                  answer:
+                    "We specialize in investment properties and can provide market analysis, ROI calculations, and ongoing investment advice.",
+                },
               ].map((faq, index) => (
                 <motion.div
                   key={index}

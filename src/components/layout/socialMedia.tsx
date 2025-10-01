@@ -46,7 +46,7 @@ const [hoveredIcon, setHoveredIcon] = useState<number | null>(null);
   return (
     <div className="bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center">
       {/* Floating Social Media Button */}
-      <div className="fixed bottom-25 right-8 z-50">
+      <div className="fixed bottom-25 right-8 z-40">
         <button
           onClick={togglePopup}
           className="group relative bg-gradient-to-r from-green-500 to-green-600 text-white p-3 shadow-2xl hover:shadow-3xl transform transition-all duration-300 hover:scale-110 border-1 border-white rounded-[100%] focus:ring-4 focus:ring-white-300"
