@@ -27,28 +27,36 @@ const contactInfo = [
     title: "Visit Our Office",
     details: [
       "No:15, Govindarajapuram 2nd street",
-      "Nellikappam Road,Guduvanchery",
-      "Chennai-603 202",
+      "Nellikappam Road, Guduvanchery",
+      "Chennai - 603 202",
     ],
     action: "Get Directions",
+    type: "map",
+    link: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3890.1525970129046!2d80.0656730751205!3d12.833414087469428!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3a52f7fad02d1cab%3A0x6a72cf4412509946!2sGreen%20Homes!5e0!3m2!1sen!2sin!4v1753284330618!5m2!1sen!2sin",
   },
   {
     icon: Phone,
     title: "Call Us",
     details: ["+91-9543326699", "+91-9841886699"],
     action: "Call Now",
+    type: "call",
+    link: "tel:+919543326699",
   },
   {
     icon: Mail,
     title: "Email Us",
     details: ["ramesh@greenhouseproperty.com", "support@greenestate.com"],
     action: "Send Email",
+    type: "email",
+    link: "mailto:ramesh@greenhouseproperty.com",
   },
   {
     icon: Clock,
     title: "Business Hours",
     details: ["Mon - Fri: 9:00 AM - 6:00 PM", "Sat - Sun: 10:00 AM - 4:00 PM"],
     action: "Schedule Visit",
+    type: "schedule",
+    link: "https://calendar.google.com",
   },
 ];
 
@@ -70,6 +78,15 @@ export default function ContactPage() {
     subject: "",
     message: "",
   });
+
+  const handleActionClick = (info: typeof contactInfo[0]) => {
+    // Open links or trigger actions based on type
+    if (info.type === "map" || info.type === "schedule") {
+      window.open(info.link, "_blank");
+    } else if (info.type === "call" || info.type === "email") {
+      window.location.href = info.link;
+    }
+  };
 
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -300,7 +317,7 @@ export default function ContactPage() {
                   whileHover={{ y: -5, scale: 1.02 }}
                 >
                   <Card className="h-full flex flex-col text-center border-2 border-gray-100 shadow-lg hover:shadow-2xl hover:border-green-300 transition-all duration-500 group bg-white relative overflow-hidden">
-                    {/* Background gradient on hover */}
+                    {/* Hover background gradient */}
                     <div className="absolute inset-0 bg-gradient-to-br from-green-50 via-transparent to-blue-50 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 
                     {/* Corner accent */}
@@ -314,21 +331,26 @@ export default function ContactPage() {
                         {info.title}
                       </CardTitle>
                     </CardHeader>
+
                     <CardContent className="flex flex-col flex-grow relative z-10">
                       <div className="space-y-2 mb-4 flex-grow">
-                        {info.details.map((detail, detailIndex) => (
-                          <p
-                            key={detailIndex}
-                            className="text-gray-600 break-words text-sm group-hover:text-gray-800 transition-colors duration-300"
-                          >
-                            {detail}
-                          </p>
-                        ))}
+                        {info.details.map(
+                          (detail: string, detailIndex: number) => (
+                            <p
+                              key={detailIndex}
+                              className="text-gray-600 break-words text-sm group-hover:text-gray-800 transition-colors duration-300"
+                            >
+                              {detail}
+                            </p>
+                          )
+                        )}
                       </div>
+
                       <div className="mt-auto flex justify-center">
                         <Button
                           variant="outline"
                           size="sm"
+                          onClick={() => handleActionClick(info)}
                           className="border-green-600 text-green-600 hover:bg-green-600 hover:text-white transition-all duration-300 group-hover:scale-105"
                         >
                           {info.action}
@@ -577,7 +599,7 @@ export default function ContactPage() {
                 </Card>
 
                 {/* Quick Actions Card */}
-                <Card className="border-2 border-gray-100 shadow-lg hover:shadow-xl transition-all duration-500 group relative overflow-hidden">
+                {/* <Card className="border-2 border-gray-100 shadow-lg hover:shadow-xl transition-all duration-500 group relative overflow-hidden">
                   <div className="absolute inset-0 bg-gradient-to-br from-green-50/50 via-transparent to-blue-50/50 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 
                   <CardHeader className="relative z-10">
@@ -608,7 +630,7 @@ export default function ContactPage() {
                       Property Valuation Request
                     </Button>
                   </CardContent>
-                </Card>
+                </Card> */}
               </motion.div>
             </div>
           </div>
