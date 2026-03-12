@@ -20,6 +20,40 @@ You can start editing the page by modifying `app/page.tsx`. The page auto-update
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
+## Enquiry Form Email Setup
+
+Both enquiry forms (`Quick Enquiry` modal and `/contact` page) now send real emails using EmailJS.
+
+1. Create `.env.local` from `.env.example` and fill these values:
+   - `NEXT_PUBLIC_EMAILJS_SERVICE_ID`
+   - `NEXT_PUBLIC_EMAILJS_TEMPLATE_ID`
+   - `NEXT_PUBLIC_EMAILJS_PUBLIC_KEY`
+   - `NEXT_PUBLIC_ENQUIRY_RECEIVER_EMAIL` (default: `arumugarajap007@gmail.com`)
+2. In EmailJS, configure your template with these variables:
+   - `to_email`
+   - `from_name`
+   - `from_email`
+   - `reply_to`
+   - `phone`
+   - `inquiry_type`
+   - `subject`
+   - `message`
+   - `source`
+   - `submitted_at`
+3. Start app: `npm run dev` and submit the enquiry form.
+
+## YouTube Shorts Fetch Setup
+
+The home page YouTube section fetches latest shorts from `@greenhomesproperty`
+using a Next.js API route at `/api/youtube/shorts`.
+
+1. Add these env vars:
+   - `YOUTUBE_API_KEY`
+   - `YOUTUBE_CHANNEL_HANDLE=greenhomesproperty`
+   - `YOUTUBE_CHANNEL_ID` (optional override)
+2. Restart dev server after updating env.
+3. For Vercel, add the same variables in Project Settings -> Environment Variables.
+
 ## Learn More
 
 To learn more about Next.js, take a look at the following resources:

@@ -2,12 +2,12 @@
 "use client"
 
 import { useState, useRef, useEffect } from "react"
-import emailjs from "emailjs-com"
 import { motion } from "framer-motion"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Badge } from "@/components/ui/badge"
+import { sendEnquiryEmail } from "@/lib/send-enquiry-email"
 import { X, Send} from "lucide-react"
 
 export default function EnquiryModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
@@ -22,26 +22,45 @@ export default function EnquiryModal({ isOpen, onClose }: { isOpen: boolean; onC
 
   const [loading, setLoading] = useState(false)
   const [sent, setSent] = useState(false)
+  const [error, setError] = useState("")
   const modalRef = useRef<HTMLDivElement>(null)
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    if (error) setError("")
     setFormData({ ...formData, [e.target.name]: e.target.value })
   }
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setLoading(true)
+    setError("")
 
-    emailjs
-      .send("YOUR_SERVICE_ID", "YOUR_TEMPLATE_ID", formData, "YOUR_PUBLIC_KEY")
-      .then(() => {
-        setSent(true)
-        setLoading(false)
+    try {
+      await sendEnquiryEmail({
+        name: formData.name,
+        email: formData.email,
+        phone: formData.phone,
+        inquiryType: formData.inquiry,
+        subject: formData.subject,
+        message: formData.message,
+        source: "quick-enquiry-modal",
       })
-      .catch(() => {
-        alert("Failed to send message. Try again.")
-        setLoading(false)
+
+      setSent(true)
+      setFormData({
+        name: "",
+        email: "",
+        phone: "",
+        inquiry: "",
+        subject: "",
+        message: "",
       })
+    } catch (submitError) {
+      const message = submitError instanceof Error ? submitError.message : "Failed to send message. Try again."
+      setError(message)
+    } finally {
+      setLoading(false)
+    }
   }
 
   // Handle click outside to close
@@ -263,6 +282,9 @@ export default function EnquiryModal({ isOpen, onClose }: { isOpen: boolean; onC
                   </span>
                 )}
               </Button>
+              {error ? (
+                <p className="text-sm text-red-600">{error}</p>
+              ) : null}
             </form>
           )}
 

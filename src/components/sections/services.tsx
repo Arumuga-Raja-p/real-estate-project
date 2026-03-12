@@ -3,28 +3,17 @@
 import { motion } from "framer-motion"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import {
-  DraftingCompass,
   LayoutTemplate,
   CheckCircle2,
-  Layers3,
   Home,
   Banknote,
   Hammer,
   FileBarChart2,
-  ClipboardList,
   MapPin,
-  Printer,
   Globe2
 } from "lucide-react";
 
 const services = [
-  {
-    icon: DraftingCompass,
-    title: "Building Plans",
-    heading: "Custom Building Plans",
-    description: "Tailored building plans crafted to meet your architectural vision and local regulations.",
-    features: ["Site Analysis", "Room Planning", "Code Compliance"]
-  },
   {
     icon: LayoutTemplate,
     title: "Layout Plans",
@@ -38,13 +27,6 @@ const services = [
     heading: "Government Approval Drawings",
     description: "Get sanctioned drawings for building permissions with accuracy and compliance.",
     features: ["DTP Drawing", "Authority Standards", "Plan Approval"]
-  },
-  {
-    icon: Layers3,
-    title: "Structural Drawing",
-    heading: "Detailed Structural Designs",
-    description: "Comprehensive structural drawings for safe and reliable construction foundations.",
-    features: ["Beam/Column Details", "Foundation Plans", "Load Calculation"]
   },
   {
     icon: Home,
@@ -75,25 +57,11 @@ const services = [
     features: ["Material Estimate", "Labor Costing", "Budget Planning"]
   },
   {
-    icon: ClipboardList,
-    title: "Project Works",
-    heading: "Turnkey Project Execution",
-    description: "End-to-end project execution covering planning, construction, and compliance.",
-    features: ["Site Management", "Project Timeline", "Quality Check"]
-  },
-  {
     icon: MapPin,
     title: "A Plotting",
     heading: "Plotting & Layout",
     description: "Land plotting services with proper demarcation and planning for residential areas.",
     features: ["Boundary Setup", "Subdivision Layout", "Utility Planning"]
-  },
-  {
-    icon: Printer,
-    title: "Ammonia (Blue) Printing",
-    heading: "Blueprint Printing",
-    description: "Get high-quality ammonia (blue) prints of your technical and construction drawings.",
-    features: ["Large Format Prints", "Crisp Lines", "Fast Delivery"]
   },
   {
     icon: Globe2,

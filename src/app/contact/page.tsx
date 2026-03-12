@@ -17,9 +17,9 @@ import {
   MessageSquare,
   User,
   Building,
-  Calendar,
 } from "lucide-react";
 import RootLayout from "@/components/layout";
+import { sendEnquiryEmail } from "@/lib/send-enquiry-email";
 
 const contactInfo = [
   {
@@ -89,12 +89,16 @@ export default function ContactPage() {
   };
 
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState("");
+  const [submitSuccess, setSubmitSuccess] = useState("");
 
   const handleInputChange = (
     e: React.ChangeEvent<
       HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
     >
   ) => {
+    if (submitError) setSubmitError("");
+    if (submitSuccess) setSubmitSuccess("");
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,
@@ -104,20 +108,40 @@ export default function ContactPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
+    setSubmitError("");
+    setSubmitSuccess("");
 
-    // Simulate form submission
-    await new Promise((resolve) => setTimeout(resolve, 2000));
+    try {
+      await sendEnquiryEmail({
+        name: formData.name,
+        email: formData.email,
+        phone: formData.phone,
+        inquiryType: formData.inquiryType,
+        subject: formData.subject,
+        message: formData.message,
+        source: "contact-page",
+      });
 
-    alert("Thank you for your inquiry! We'll get back to you within 24 hours.");
-    setFormData({
-      name: "",
-      email: "",
-      phone: "",
-      inquiryType: "",
-      subject: "",
-      message: "",
-    });
-    setIsSubmitting(false);
+      setFormData({
+        name: "",
+        email: "",
+        phone: "",
+        inquiryType: "",
+        subject: "",
+        message: "",
+      });
+      setSubmitSuccess(
+        "Thank you for your inquiry! We will get back to you within 24 hours."
+      );
+    } catch (error) {
+      const message =
+        error instanceof Error
+          ? error.message
+          : "Failed to send your message. Please try again.";
+      setSubmitError(message);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -531,6 +555,12 @@ export default function ContactPage() {
                           "Send Message"
                         )}
                       </Button>
+                      {submitError ? (
+                        <p className="text-sm text-red-600">{submitError}</p>
+                      ) : null}
+                      {submitSuccess ? (
+                        <p className="text-sm text-green-700">{submitSuccess}</p>
+                      ) : null}
                     </form>
                   </CardContent>
                 </Card>
