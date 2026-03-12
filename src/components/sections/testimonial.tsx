@@ -6,6 +6,16 @@ import { ChevronLeft, ChevronRight, Star } from "lucide-react";
 import Image from "next/image";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { fetchReviews } from "@/lib/review";
+
+interface Testimonial {
+  _id: string;
+  name: string;
+  description: string;
+  rating: number;
+  imageUrl: string;
+  role?: string;
+}
 
 interface CarouselProps {
   children: React.ReactNode[];
@@ -97,40 +107,17 @@ export function Carousel({
 }
 
 export function TestimonialsSection() {
-  const testimonials = [
-    {
-      name: "Sarah Johnson",
-      role: "Fashion Designer",
-      content:
-         "Green Homes made buying my first home an amazing experience. Their team was patient, knowledgeable, and helped me find the perfect property within my budget.",
-      rating: 5,
-      avatar: "/boi.jpg",
-    },
-    {
-      name: "Michael Chen",
-      role: "Photographer",
-      content:
-         "I've worked with many real estate companies, but Green Home stands out. Their market insights and investment advice have been invaluable for my portfolio.",
-      rating: 5,
-      avatar: "/mengls.jpg",
-    },
-    {
-      name: "Emma Davis",
-      role: "Business Executive",
-      content:
-         "Selling our family home was emotional, but the Green Home team handled everything professionally. We got a great price and closed quickly.",
-      rating: 5,
-      avatar: "/stylwmn.jpg",
-    },
-    {
-      name: "Amit Sharma",
-      role: "Entrepreneur",
-      content:
-        "The customer support and product durability are unmatched. Highly recommended for anyone serious about style.",
-      rating: 5,
-      avatar: "/stylwmn.jpg",
-    },
-  ];
+  const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const loadTestimonials = async () => { 
+      const data = await fetchReviews();
+      setTestimonials(data);
+      setLoading(false);
+    }
+    loadTestimonials();
+  }, []);
 
   return (
     <section className=" bg-gradient-to-r from-gray-900 to-black py-16">
@@ -146,44 +133,50 @@ export function TestimonialsSection() {
           </h2>
         </motion.div>
 
-        <Carousel className="max-w-3xl mx-auto">
-          {testimonials.map((testimonial, index) => (
-            <Card
-              key={index}
-              className="glass-effect bg-white/5 border border-white/10 p-8 text-center text-white shadow-lg backdrop-blur-md"
-            >
-              <CardContent className="p-0">
-                <div className="flex justify-center mb-6">
-                  {[...Array(testimonial.rating)].map((_, i) => (
-                    <Star
-                      key={i}
-                      className="h-6 w-6 fill-yellow-400 text-yellow-400"
-                    />
-                  ))}
-                </div>
-                <p className="text-xl text-gray-300 mb-8 leading-relaxed italic">
-                  &quot;{testimonial.content}&quot;
-                </p>
-                <div className="flex items-center justify-center">
-                  <div className="w-16 h-16 rounded-full overflow-hidden mr-4 relative">
-                    <Image
-                      src={testimonial.avatar}
-                      alt={`${testimonial.name} avatar`}
-                      layout="fill"
-                      objectFit="cover"
-                    />
+        {loading ? (
+          <div className="text-center text-gray-300 mt-8">Loading testimonials...</div>
+        ) : testimonials.length > 0 ? (
+          <Carousel className="max-w-3xl mx-auto">
+            {testimonials.map((testimonial, index) => (
+              <Card
+                key={index}
+                className="glass-effect bg-white/5 border border-white/10 p-8 text-center text-white shadow-lg backdrop-blur-md"
+              >
+                <CardContent className="p-0">
+                  <div className="flex justify-center mb-6">
+                    {[...Array(testimonial.rating)].map((_, i) => (
+                      <Star
+                        key={i}
+                        className="h-6 w-6 fill-yellow-400 text-yellow-400"
+                      />
+                    ))}
                   </div>
-                  <div className="text-left">
-                    <p className="font-bold text-white text-lg">
-                      {testimonial.name}
-                    </p>
-                    <p className="text-gray-400">{testimonial.role}</p>
+                  <p className="text-xl text-gray-300 mb-8 leading-relaxed italic">
+                    &quot;{testimonial.description}&quot;
+                  </p>
+                  <div className="flex items-center justify-center">
+                    <div className="w-16 h-16 rounded-full overflow-hidden mr-4 relative">
+                      <Image
+                        src={testimonial.imageUrl}
+                        alt={`${testimonial.name} avatar`}
+                        layout="fill"
+                        objectFit="cover"
+                      />
+                    </div>
+                    <div className="text-left">
+                      <p className="font-bold text-white text-lg">
+                        {testimonial.name}
+                      </p>
+                      <p className="text-gray-400">{testimonial.role ?? "Client"}</p>
+                    </div>
                   </div>
-                </div>
-              </CardContent>
-            </Card>
-          ))}
-        </Carousel>
+                </CardContent>
+              </Card>
+            ))}
+          </Carousel>
+        ) : (
+          <div className="text-center text-gray-400 mt-8">No testimonials available.</div>
+        )}
       </div>
     </section>
   );

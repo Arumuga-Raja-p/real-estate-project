@@ -8,87 +8,9 @@ import { PropertyCard } from "@/components/ui/property-card"
 import { PropertyFilters } from "@/components/ui/property-filters"
 import { Badge } from "@/components/ui/badge"
 import RootLayout from "@/components/layout"
+import { fetchProperties } from "@/lib/property"
 
-const properties = [
-  {
-    id: 1,
-    title: "Modern Downtown Apartment",
-    price: 450000,
-    location: "Downtown District",
-    bedrooms: 2,
-    bathrooms: 2,
-    area: 1200,
-    image: "/galary/1.jpg",
-    type: "apartment",
-    status: "for-sale",
-    featured: true,
-  },
-  {
-    id: 2,
-    title: "Luxury Family Villa",
-    price: 850000,
-    location: "Greenwood Heights",
-    bedrooms: 4,
-    bathrooms: 3,
-    area: 2800,
-    image: "/galary/2.jpg",
-    type: "house",
-    status: "for-sale",
-    featured: true,
-  },
-  {
-    id: 3,
-    title: "Cozy Studio Loft",
-    price: 280000,
-    location: "Arts Quarter",
-    bedrooms: 1,
-    bathrooms: 1,
-    area: 650,
-    image: "/galary/3.jpg",
-    type: "apartment",
-    status: "for-sale",
-    featured: false,
-  },
-  {
-    id: 4,
-    title: "Executive Penthouse",
-    price: 1200000,
-    location: "Skyline Tower",
-    bedrooms: 3,
-    bathrooms: 3,
-    area: 2200,
-    image: "/galary/4.jpg",
-    type: "apartment",
-    status: "for-sale",
-    featured: true,
-  },
-  {
-    id: 5,
-    title: "Suburban Family Home",
-    price: 620000,
-    location: "Maple Grove",
-    bedrooms: 3,
-    bathrooms: 2,
-    area: 1800,
-    image: "/galary/5.jpg",
-    type: "house",
-    status: "for-sale",
-    featured: false,
-  },
-  {
-    id: 6,
-    title: "Waterfront Condo",
-    price: 750000,
-    location: "Marina Bay",
-    bedrooms: 2,
-    bathrooms: 2,
-    area: 1400,
-    image: "/galary/6.jpg",
-    type: "apartment",
-    status: "for-sale",
-    featured: true,
-  },
-]
+const properties =  await fetchProperties()
 
 export default function PropertiesPage() {
   const [filteredProperties, setFilteredProperties] = useState(properties)
@@ -97,20 +19,20 @@ export default function PropertiesPage() {
     let filtered = properties
 
     if (filters.type && filters.type !== "all") {
-      filtered = filtered.filter((property) => property.type === filters.type)
+      filtered = filtered.filter((property: { type: any }) => property.type === filters.type)
     }
 
     if (filters.priceRange) {
       const [min, max] = filters.priceRange
-      filtered = filtered.filter((property) => property.price >= min && property.price <= max)
+      filtered = filtered.filter((property: { price: number }) => property.price >= min && property.price <= max)
     }
 
     if (filters.bedrooms && filters.bedrooms !== "any") {
-      filtered = filtered.filter((property) => property.bedrooms >= Number.parseInt(filters.bedrooms))
+      filtered = filtered.filter((property: { bedrooms: number }) => property.bedrooms >= Number.parseInt(filters.bedrooms))
     }
 
     if (filters.location && filters.location !== "all") {
-      filtered = filtered.filter((property) => property.location.toLowerCase().includes(filters.location.toLowerCase()))
+      filtered = filtered.filter((property: { location: string }) => property.location.toLowerCase().includes(filters.location.toLowerCase()))
     }
 
     setFilteredProperties(filtered)
@@ -166,7 +88,7 @@ export default function PropertiesPage() {
               </div>
 
               <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-6">
-                {filteredProperties.map((property, index) => (
+                {filteredProperties.map((property:any, index: number) => (
                   <motion.div
                     key={property.id}
                     initial={{ opacity: 0, y: 20 }}

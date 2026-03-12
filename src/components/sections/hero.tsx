@@ -1,6 +1,7 @@
 "use client";
 import { motion, AnimatePresence } from "framer-motion";
-import React, { useState, useEffect } from "react";
+import Image from "next/image";
+import React, { useState, useEffect, useCallback } from "react";
 import {
   Home,
   MapPin,
@@ -10,60 +11,52 @@ import {
   ChevronRight,
 } from "lucide-react";
 
+const slides = [
+  {
+    id: 1,
+    image:
+      "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=500&h=600&fit=crop",
+    title: "Modern Villa",
+    location: "Downtown District",
+    rating: 4.8,
+    icon: Home,
+    iconBg: "bg-green-100",
+    iconColor: "text-green-600",
+  },
+  {
+    id: 2,
+    image:
+      "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=500&h=600&fit=crop",
+    title: "Luxury Apartment",
+    location: "Business Center",
+    rating: 4.9,
+    icon: MapPin,
+    iconBg: "bg-green-100",
+    iconColor: "text-green-600",
+  },
+  {
+    id: 3,
+    image:
+      "https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?w=500&h=600&fit=crop",
+    title: "Premium Condo",
+    location: "Skyline View",
+    rating: 4.7,
+    icon: Star,
+    iconBg: "bg-green-100",
+    iconColor: "text-green-600",
+  },
+];
+
 export function Hero() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [direction, setDirection] = useState(0);
 
-  const slides = [
-    {
-      id: 1,
-      image:
-        "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=500&h=600&fit=crop",
-      title: "Modern Villa",
-      location: "Downtown District",
-      rating: 4.8,
-      icon: Home,
-      iconBg: "bg-green-100",
-      iconColor: "text-green-600",
-    },
-    {
-      id: 2,
-      image:
-        "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=500&h=600&fit=crop",
-      title: "Luxury Apartment",
-      location: "Business Center",
-      rating: 4.9,
-      icon: MapPin,
-      iconBg: "bg-green-100",
-      iconColor: "text-green-600",
-    },
-    {
-      id: 3,
-      image:
-        "https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?w=500&h=600&fit=crop",
-      title: "Premium Condo",
-      location: "Skyline View",
-      rating: 4.7,
-      icon: Star,
-      iconBg: "bg-green-100",
-      iconColor: "text-green-600",
-    },
-  ];
-
-  // Auto-slide functionality
-  useEffect(() => {
-    const interval = setInterval(() => {
-      handleNext();
-    }, 4000); // Change slide every 4 seconds
-    return () => clearInterval(interval);
-  }, [currentIndex]);
-
-  const handleNext = () => {
+  const handleNext = useCallback(() => {
     setDirection(1);
     setCurrentIndex((prevIndex) =>
       prevIndex === slides.length - 1 ? 0 : prevIndex + 1
     );
-  };
+  }, []);
 
   const handlePrevious = () => {
     setDirection(-1);
@@ -71,6 +64,14 @@ export function Hero() {
       prevIndex === 0 ? slides.length - 1 : prevIndex - 1
     );
   };
+
+  // Auto-slide functionality
+  useEffect(() => {
+    const interval = setInterval(() => {
+      handleNext();
+    }, 4000); // Change slide every 4 seconds
+    return () => clearInterval(interval);
+  }, [handleNext]);
 
   const goToSlide = (index: number) => {
     setDirection(index > currentIndex ? 1 : -1);
@@ -386,9 +387,11 @@ export function Hero() {
                         }}
                         className="absolute inset-0"
                       >
-                        <img
+                        <Image
                           src={currentSlide.image}
                           alt={currentSlide.title}
+                          fill
+                          sizes="(max-width: 1024px) 100vw, 40vw"
                           className="w-full h-full object-cover"
                         />
                         {/* Gradient Overlay */}

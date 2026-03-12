@@ -50,6 +50,7 @@ export function Stats() {
   const sectionRef = useRef(null)
 
   useEffect(() => {
+    const observedElement = sectionRef.current
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
@@ -62,13 +63,13 @@ export function Stats() {
       }
     )
 
-    if (sectionRef.current) {
-      observer.observe(sectionRef.current)
+    if (observedElement) {
+      observer.observe(observedElement)
     }
 
     return () => {
-      if (sectionRef.current) {
-        observer.unobserve(sectionRef.current)
+      if (observedElement) {
+        observer.unobserve(observedElement)
       }
     }
   }, [])

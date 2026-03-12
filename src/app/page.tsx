@@ -4,21 +4,20 @@ import { Services } from "@/components/sections/services"
 import { Stats } from "@/components/sections/stats"
 import { TestimonialsSection } from "@/components/sections/testimonial"
 import { CTA } from "@/components/sections/cta"
-import RootLayout from "@/components/layout"
 import ImageGridSection from "@/components/sections/partners"
+import YouTubeSection from "@/components/sections/youtube"
 
 export default function HomePage() {
   return (
-    <RootLayout>
-          <>
+    <>
       <Hero />
       <FeaturedProperties />
       <ImageGridSection/>
       <Services />
       <Stats />
+      <YouTubeSection />
       <TestimonialsSection />
       <CTA />
     </>
-    </RootLayout>
   )
 }

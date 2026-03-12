@@ -9,14 +9,14 @@ import Image from "next/image"
 import { useState } from "react"
 
 interface Property {
-  id: number
+  id: string | number
   title: string
   price: number
   location: string
   bedrooms: number
   bathrooms: number
   area: number
-  image: string
+  images: { url: string }[]
   type: string
   status: string
   featured?: boolean
@@ -38,7 +38,8 @@ export function PropertyModal({ property, isOpen, onClose }: PropertyModalProps)
 
 const handleContactClick = () => {
   const phone = "7397165773"; // Replace with your number
-  const message = `Hello, I'm interested in the property: "${property.title}" located at ${property.location}. Bedrooms: ${property.bedrooms}, Bathrooms: ${property.bathrooms}, Area: ${property.area} sqft.Here's the link to its image: https://real-estate-dun-pi.vercel.app/${property.image} Please confirm if it's available.`;
+  const primaryImage = property.images?.[0]?.url || "/placeholder.svg";
+  const message = `Hello, I'm interested in the property: "${property.title}" located at ${property.location}. Bedrooms: ${property.bedrooms}, Bathrooms: ${property.bathrooms}, Area: ${property.area} sqft. Here's the link to its image: ${primaryImage} Please confirm if it's available.`;
 
   const whatsappURL = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
 
@@ -48,16 +49,14 @@ const handleContactClick = () => {
 
 
   // Sample additional images for the gallery
-  const additionalImages = [
-    property.image,
-    "/galary/2.jpg",
-    "/galary/4.jpg",
-    "/galary/5.jpg",
-    "/galary/6.jpg"
-  ]
+  const additionalImages = property.images
+    ?.map((image) => image.url)
+    .filter(Boolean)
+
+  const galleryImages = additionalImages?.length ? additionalImages : ["/placeholder.svg"]
 
   const handleImageClick = (index: number) => {
-    setSelectedImage(index)
+    setSelectedImage(index) 
   }
 
   // Sample features
@@ -123,7 +122,7 @@ const handleContactClick = () => {
                   {/* Main Image */}
                   <div className="relative rounded-xl overflow-hidden">
                     <Image
-                      src={additionalImages[selectedImage] || "/placeholder.svg"}
+                      src={galleryImages[selectedImage] || galleryImages[0]}
                       alt={property.title}
                       width={600}
                       height={400}
@@ -134,7 +133,7 @@ const handleContactClick = () => {
 
                   {/* Image Gallery */}
                   <div className="grid grid-cols-5 gap-2">
-                    {additionalImages.map((img, index) => (
+                    {galleryImages.map((img, index) => (
                       <div 
                         key={index} 
                         className={`relative rounded-lg overflow-hidden cursor-pointer transition-all duration-200 ${
