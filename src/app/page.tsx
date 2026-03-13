@@ -6,13 +6,16 @@ import { TestimonialsSection } from "@/components/sections/testimonial"
 import { CTA } from "@/components/sections/cta"
 import ImageGridSection from "@/components/sections/partners"
 import YouTubeSection from "@/components/sections/youtube"
+import { fetchPartnersSection } from "@/lib/partners"
 
-export default function HomePage() {
+export default async function HomePage() {
+  const partnersSection = await fetchPartnersSection()
+
   return (
     <>
       <Hero />
       <FeaturedProperties />
-      <ImageGridSection/>
+      {partnersSection ? <ImageGridSection {...partnersSection} /> : null}
       <Services />
       <Stats />
       <YouTubeSection />
