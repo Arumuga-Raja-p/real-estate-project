@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Slider } from "@/components/ui/slider";
 import { motion } from "framer-motion";
+import { formatINR } from "@/lib/format";
 
 // ✅ Define type for filters
 interface Filters {
@@ -115,10 +116,10 @@ export function PropertyFilters({
             {/* Display price range */}
             <div className="flex justify-between text-sm font-medium text-gray-600 mb-3 px-1">
               <span className="bg-green-50 px-2 py-1 rounded group-hover:bg-green-100 transition-colors duration-300">
-                ₹{filters.priceRange[0].toLocaleString()}
+                {formatINR(filters.priceRange[0])}
               </span>
               <span className="bg-green-50 px-2 py-1 rounded group-hover:bg-green-100 transition-colors duration-300">
-                ₹{filters.priceRange[1].toLocaleString()}
+                {formatINR(filters.priceRange[1])}
               </span>
             </div>
 

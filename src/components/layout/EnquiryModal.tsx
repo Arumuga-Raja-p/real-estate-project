@@ -26,8 +26,19 @@ export default function EnquiryModal({ isOpen, onClose }: { isOpen: boolean; onC
     setFormData({ ...formData, [e.target.name]: e.target.value })
   }
 
+  const handleFieldChange = (name: keyof EnquiryFormData, value: string) => {
+    if (error) setError("")
+    setFormData((prev) => ({ ...prev, [name]: value }))
+  }
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+
+    if (!formData.inquiryType) {
+      setError("Please select an inquiry type.")
+      return
+    }
+
     setLoading(true)
     setError("")
 
@@ -152,6 +163,7 @@ export default function EnquiryModal({ isOpen, onClose }: { isOpen: boolean; onC
               <EnquiryFormFields
                 formData={formData}
                 onChange={handleChange}
+                onFieldChange={handleFieldChange}
                 messageRows={4}
                 labelClassName="block text-sm font-medium text-gray-700 mb-2 group-hover:text-gray-900 transition-colors duration-300"
                 inputClassName="border-gray-300 focus:border-green-500 focus:ring-green-500 transition-colors duration-300"

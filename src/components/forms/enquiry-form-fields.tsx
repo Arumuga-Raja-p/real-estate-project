@@ -4,6 +4,7 @@ import type React from "react";
 
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { EnquiryTypeSelect } from "@/components/ui/enquiry-type-select";
 import {
   ENQUIRY_TYPE_OPTIONS,
   type EnquiryFormData,
@@ -16,6 +17,7 @@ interface EnquiryFormFieldsProps {
       HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
     >
   ) => void;
+  onFieldChange?: (name: keyof EnquiryFormData, value: string) => void;
   labelClassName?: string;
   inputClassName?: string;
   selectClassName?: string;
@@ -26,9 +28,10 @@ interface EnquiryFormFieldsProps {
 export function EnquiryFormFields({
   formData,
   onChange,
+  onFieldChange,
   labelClassName = "block text-sm font-medium text-gray-700 mb-2",
   inputClassName = "border-gray-300 focus:border-green-500 focus:ring-green-500 transition-colors duration-300",
-  selectClassName = "w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition-colors duration-300",
+  selectClassName = "w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-colors duration-300",
   textareaClassName = "resize-none border-gray-300 focus:border-green-500 focus:ring-green-500 transition-colors duration-300",
   messageRows = 4,
 }: EnquiryFormFieldsProps) {
@@ -86,21 +89,13 @@ export function EnquiryFormFields({
           <label htmlFor="inquiryType" className={labelClassName}>
             Inquiry Type *
           </label>
-          <select
-            id="inquiryType"
-            name="inquiryType"
-            required
+          <EnquiryTypeSelect
             value={formData.inquiryType}
-            onChange={onChange}
-            className={selectClassName}
-          >
-            <option value="">Select inquiry type</option>
-            {ENQUIRY_TYPE_OPTIONS.map((type) => (
-              <option key={type.value} value={type.value}>
-                {type.label}
-              </option>
-            ))}
-          </select>
+            options={ENQUIRY_TYPE_OPTIONS}
+            placeholder="Select inquiry type"
+            onValueChange={(value) => onFieldChange?.("inquiryType", value)}
+            triggerClassName={selectClassName}
+          />
         </div>
       </div>
 

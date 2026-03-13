@@ -23,7 +23,7 @@ export default function EnquiryButton() {
 
   return (
     <div
-      className="fixed bottom-20 right-7 z-50"
+      className="fixed bottom-20 right-7 z-50 hidden lg:block"
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
     >

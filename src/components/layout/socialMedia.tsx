@@ -46,14 +46,14 @@ const [hoveredIcon, setHoveredIcon] = useState<number | null>(null);
   return (
     <div className="bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center">
       {/* Floating Social Media Button */}
-      <div className="fixed bottom-40 right-8 z-40">
+      <div className="fixed bottom-40 right-8 z-20">
         <button
           onClick={togglePopup}
-          className="group relative bg-gradient-to-r from-green-500 to-green-600 text-white p-3 shadow-2xl hover:shadow-3xl transform transition-all duration-300 hover:scale-110 border-1 border-white rounded-[100%] focus:ring-4 focus:ring-white-300"
+          className="group relative bg-gradient-to-r from-green-500 to-green-600 text-white p-2 lg:p-3 shadow-xl hover:shadow-2xl transform transition-all duration-300 hover:scale-110 border-1 border-white rounded-[100%] focus:ring-4 focus:ring-white-300"
           aria-label="Open social media links"
         >
           <Share2
-            className={`h-6 w-6 transition-transform duration-300 ${
+            className={`h-5 w-5 lg:h-6 lg:w-6 transition-transform duration-300 ${
               isPopupOpen ? "rotate-180" : "group-hover:rotate-12"
             }`}
           />
@@ -64,7 +64,7 @@ const [hoveredIcon, setHoveredIcon] = useState<number | null>(null);
       </div>
 
       {/* Social Media Icons - Vertical Layout */}
-      <div className="fixed bottom-53 right-8 z-50">
+      <div className="fixed bottom-53 right-8 z-20">
         <div className="flex flex-col-reverse space-y-reverse space-y-3">
           {socialLinks.map((social, index) => {
             const IconComponent = social.icon;
@@ -83,7 +83,7 @@ const [hoveredIcon, setHoveredIcon] = useState<number | null>(null);
                 style={{
                   transitionDelay: `${(socialLinks.length - 1 - index) * 100}ms`,
                 }}
-              >
+                >
                 <a
                   href={social.url}
                   target="_blank"
@@ -96,7 +96,7 @@ const [hoveredIcon, setHoveredIcon] = useState<number | null>(null);
                   {/* Main Icon Circle */}
                   <div
                     className={`
-                    w-14 h-14 rounded-full bg-white shadow-lg hover:shadow-2xl
+                    w-12 h-12 lg:w-14 lg:h-14 rounded-full bg-white shadow-md lg:shadow-lg hover:shadow-xl lg:hover:shadow-2xl
                     flex items-center justify-center
                     transform transition-all duration-300 hover:scale-110
                     border-2 border-gray-100 hover:border-white
@@ -114,7 +114,7 @@ const [hoveredIcon, setHoveredIcon] = useState<number | null>(null);
 
                     <IconComponent
                       className={`
-                        h-6 w-6 transition-all duration-300 relative z-10
+                        h-5 w-5 lg:h-6 lg:w-6 transition-all duration-300 relative z-10
                         group-hover:text-white group-hover:scale-110
                       `}
                       style={{

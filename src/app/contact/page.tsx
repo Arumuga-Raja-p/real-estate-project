@@ -91,8 +91,20 @@ export default function ContactPage() {
     });
   };
 
+  const handleFieldChange = (name: keyof EnquiryFormData, value: string) => {
+    if (submitError) setSubmitError("");
+    if (submitSuccess) setSubmitSuccess("");
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (!formData.inquiryType) {
+      setSubmitError("Please select an inquiry type.");
+      return;
+    }
+
     setIsSubmitting(true);
     setSubmitError("");
     setSubmitSuccess("");
@@ -395,6 +407,7 @@ export default function ContactPage() {
                       <EnquiryFormFields
                         formData={formData}
                         onChange={handleInputChange}
+                        onFieldChange={handleFieldChange}
                         messageRows={6}
                         labelClassName="block text-sm font-medium text-gray-700 mb-2 group-hover:text-gray-900 transition-colors duration-300"
                         inputClassName="border-gray-300 focus:border-green-500 focus:ring-green-500 transition-colors duration-300"

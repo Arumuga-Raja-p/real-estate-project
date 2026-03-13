@@ -15,10 +15,13 @@ const achievements = [
   { icon: Award, number: "15+", label: "Industry Awards" },
   { icon: TrendingUp, number: "98%", label: "Client Satisfaction" },
 ];
+const animatedHeading = "Creating Homes...";
 
 export default function AboutPage() {
   const [selectedMember, setSelectedMember] = useState<TeamMember | null>(null);
   const [teamSection, setTeamSection] = useState<AboutTeamSectionData | null>(null);
+  const [typedHeading, setTypedHeading] = useState("");
+  const [isDeleting, setIsDeleting] = useState(false);
 
   useEffect(() => {
     let isMounted = true;
@@ -33,6 +36,25 @@ export default function AboutPage() {
       isMounted = false;
     };
   }, []);
+
+  useEffect(() => {
+    if (!isDeleting && typedHeading === animatedHeading) {
+      const timeout = window.setTimeout(() => setIsDeleting(true), 900);
+      return () => window.clearTimeout(timeout);
+    }
+
+    if (isDeleting && typedHeading.length === 0) {
+      const timeout = window.setTimeout(() => setIsDeleting(false), 300);
+      return () => window.clearTimeout(timeout);
+    }
+
+    const timeout = window.setTimeout(() => {
+      const nextLength = typedHeading.length + (isDeleting ? -1 : 1);
+      setTypedHeading(animatedHeading.slice(0, nextLength));
+    }, isDeleting ? 70 : 110);
+
+    return () => window.clearTimeout(timeout);
+  }, [isDeleting, typedHeading]);
 
   return (
     <RootLayout>
@@ -61,11 +83,19 @@ export default function AboutPage() {
             <Badge className="mb-4 bg-green-100 text-green-800 hover:bg-green-200 sm:mb-6">
               About GreenHouse
             </Badge>
-            <h1 className="mb-5 max-w-4xl text-4xl font-bold leading-none text-gray-900 sm:mb-6 sm:text-5xl md:text-6xl lg:text-7xl">
+            <h1
+              className="mb-5 max-w-4xl text-4xl font-bold leading-none text-gray-900 sm:mb-6 sm:text-5xl md:text-6xl lg:text-7xl"
+              style={{
+                WebkitTextStroke: "10.5px rgba(255, 255, 255, 0.95)",
+                paintOrder: "stroke fill",
+              }}
+            >
               Building Dreams,
-              <span className="block text-green-600">Creating Homes</span>
+              <span className="block min-h-[1.1em] text-green-600">
+                {typedHeading}
+              </span>
             </h1>
-            <p className="max-w-4xl text-base leading-relaxed text-gray-700 sm:text-lg md:text-xl">
+            <p className="max-w-4xl text-base font-semibold leading-relaxed text-gray-700 sm:text-lg md:text-xl">
               For over two decades, Green Home has been the trusted partner for
               families, investors, and businesses seeking exceptional real
               estate solutions. Our commitment to excellence and personalized

@@ -1,14 +1,14 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import { Menu, X } from "lucide-react";
 import Image from "next/image";
 import EnquiryModal from "@/components/layout/EnquiryModal";
 import navbarLogo from "@/app/asstes/Logo.png";
+import { ModernMobileMenu } from "@/components/ui/modern-mobile-menu";
 
 const navItems = [
   { href: "/", label: "Home" },
@@ -20,27 +20,18 @@ const navItems = [
 ];
 
 export function Navigation() {
-  const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const [, setIsMobile] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const pathname = usePathname();
 
   useEffect(() => {
-    const handleResize = () => {
-      setIsMobile(window.innerWidth < 1024);
-    };
-
     const handleScroll = () => {
       setScrolled(window.scrollY > 50);
     };
 
-    window.addEventListener("resize", handleResize);
     window.addEventListener("scroll", handleScroll);
-    handleResize();
 
     return () => {
-      window.removeEventListener("resize", handleResize);
       window.removeEventListener("scroll", handleScroll);
     };
   }, []);
@@ -119,94 +110,22 @@ export function Navigation() {
                   size="sm"
                   className="relative bg-green-600 text-white border border-green-600 transition-all duration-300 hover:bg-white hover:text-green-600 hover:backdrop-blur-md hover:shadow-lg"
                   onClick={() => {
-                    setIsOpen(false);
                     setIsModalOpen(true);
                   }}
                 >
                   Enquire Now
                 </Button>
               </div>
-
-              {/* Mobile Menu Toggle */}
-              <Button
-                variant="ghost"
-                size="sm"
-                className="ml-auto lg:hidden"
-                onClick={() => setIsOpen(!isOpen)}
-              >
-                {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-              </Button>
             </div>
           </div>
-
-          {/* Mobile Menu Content */}
-          <AnimatePresence>
-            {isOpen && (
-              <motion.div
-                initial={{ opacity: 0, height: 0 }}
-                animate={{ opacity: 1, height: "auto" }}
-                exit={{ opacity: 0, height: 0 }}
-                className="lg:hidden bg-white border-t"
-              >
-                <div className="container mx-auto px-4 py-4">
-                  <div className="flex flex-col space-y-4">
-                    {navItems.map((item) => (
-                      <Link
-                        key={item.href}
-                        href={item.href}
-                        className={`text-gray-700 hover:text-green-600 transition-colors font-medium py-2 ${
-                          pathname === item.href ? "text-green-600" : ""
-                        }`}
-                        onClick={() => setIsOpen(false)}
-                      >
-                        {item.label}
-                      </Link>
-                    ))}
-
-                    {/* Mobile CTAs */}
-                    <div className="flex flex-col space-y-2 pt-4 px-3 border-t">
-                      
-                        <Button className="block bg-green-600 text-white border border-green-600 transition-all duration-300 hover:bg-white hover:text-green-600 hover:backdrop-blur-md hover:shadow-lg lg:hidden">
-                          <a href="tel:+919841886699">Call Me </a>
-                        </Button>
-                     
-
-                      <a
-                        href="https://wa.me/919841886699"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="block lg:hidden"
-                      >
-                        <div className="flex items-center justify-center border rounded-md px-4 py-2 text-sm font-medium text-white bg-green-500 hover:bg-green-600 transition-colors">
-                          <Image
-                            src="/about/whatsapp.png"
-                            alt="WhatsApp"
-                            width={20}
-                            height={20}
-                            className="mr-2"
-                          />
-                          WhatsApp
-                        </div>
-                      </a>
-
-                      <Button
-                        size="sm"
-                        className="relative bg-green-600 text-white border border-green-600 transition-all duration-300 hover:bg-white hover:text-green-600 hover:backdrop-blur-md hover:shadow-lg"
-                        onClick={() => {
-                          setIsOpen(false);
-                          setIsModalOpen(true);
-                        }}
-                      >
-                        Enquire Now
-                      </Button>
-                    </div>
-                  </div>
-                </div>
-              </motion.div>
-            )}
-          </AnimatePresence>
         </motion.nav>
       )}
+
+      {!isModalOpen ? (
+        <ModernMobileMenu
+          onEnquire={() => setIsModalOpen(true)}
+        />
+      ) : null}
     </>
   );
 }

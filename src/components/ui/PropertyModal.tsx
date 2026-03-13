@@ -7,6 +7,7 @@ import { Badge } from "@/components/ui/badge"
 import Image from "next/image"
 // import { useRouter } from "next/navigation"
 import { useState } from "react"
+import { formatINR } from "@/lib/format"
 
 interface Property {
   id: string | number
@@ -161,7 +162,14 @@ const handleContactClick = () => {
                 {/* Right - Details */}
                 <div className="space-y-3">
                   {/* Price */}
-                  
+                  <div className="flex items-baseline gap-2">
+                    <div className="text-3xl font-bold text-green-600">
+                      {formatINR(property.price)}
+                    </div>
+                    {property.isRental ? (
+                      <div className="text-sm font-medium text-gray-500">/month</div>
+                    ) : null}
+                  </div>
 
                   {/* Key Details */}
                   <div className="grid grid-cols-3 gap-4">

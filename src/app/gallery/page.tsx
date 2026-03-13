@@ -1,91 +1,45 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 // import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { X } from "lucide-react"
 import Image from "next/image"
 import RootLayout from "@/components/layout"
-
-const galleryItems = [
-  {
-    id: 1,
-    title: "Modern Kitchen Design",
-    category: "interior",
-    image: "/galary/1.jpg",
-    description: "Contemporary kitchen with premium appliances and marble countertops",
-  },
-  {
-    id: 2,
-    title: "Luxury Living Room",
-    category: "interior",
-    image: "/galary/2.jpg",
-    description: "Spacious living area with floor-to-ceiling windows",
-  },
-  {
-    id: 3,
-    title: "Downtown Skyline View",
-    category: "exterior",
-    image: "/galary/3.jpg",
-    description: "Stunning city views from premium high-rise apartments",
-  },
-  {
-    id: 4,
-    title: "Master Bedroom Suite",
-    category: "interior",
-    image: "/galary/4.jpg",
-    description: "Elegant master bedroom with walk-in closet and en-suite bathroom",
-  },
-  {
-    id: 5,
-    title: "Garden Landscape",
-    category: "exterior",
-    image: "/galary/5.jpg",
-    description: "Beautifully landscaped garden with outdoor seating area",
-  },
-  {
-    id: 6,
-    title: "Spa Bathroom",
-    category: "interior",
-    image: "/galary/6.jpg",
-    description: "Luxury bathroom with soaking tub and rainfall shower",
-  },
-  {
-    id: 7,
-    title: "Property Facade",
-    category: "exterior",
-    image: "/galary/7.jpg",
-    description: "Modern architectural design with premium materials",
-  },
-  {
-    id: 8,
-    title: "Home Office Space",
-    category: "interior",
-    image: "/galary/8.jpg",
-    description: "Dedicated workspace with built-in storage and natural light",
-  },
-  {
-    id: 9,
-    title: "Rooftop Terrace",
-    category: "exterior",
-    image: "/galary/9.jpg",
-    description: "Private rooftop terrace with panoramic city views",
-  },
-]
-
-const categories = [
-  { id: "all", label: "All Projects" },
-  { id: "interior", label: "Ongoing Project" },
-  { id: "exterior", label: "Completed Projects" },
-]
+import { fetchGalleryPage, type GalleryItem, type GalleryPageData } from "@/lib/gallery"
 
 export default function GalleryPage() {
   const [selectedCategory, setSelectedCategory] = useState("all")
-  const [selectedImage, setSelectedImage] = useState<(typeof galleryItems)[0] | null>(null)
+  const [selectedImage, setSelectedImage] = useState<GalleryItem | null>(null)
+  const [galleryPage, setGalleryPage] = useState<GalleryPageData | null>(null)
+
+  useEffect(() => {
+    let isMounted = true
+
+    fetchGalleryPage().then((data) => {
+      if (isMounted) {
+        setGalleryPage(data)
+      }
+    })
+
+    return () => {
+      isMounted = false
+    }
+  }, [])
+
+  const categories = galleryPage
+    ? [
+        { id: "all", label: galleryPage.allProjectsLabel },
+        { id: "ongoing", label: galleryPage.ongoingProjectsLabel },
+        { id: "completed", label: galleryPage.completedProjectsLabel },
+      ]
+    : []
 
   const filteredItems =
-    selectedCategory === "all" ? galleryItems : galleryItems.filter((item) => item.category === selectedCategory)
+    selectedCategory === "all"
+      ? galleryPage?.items || []
+      : (galleryPage?.items || []).filter((item) => item.category === selectedCategory)
 
   return (
     <RootLayout>
@@ -137,37 +91,39 @@ export default function GalleryPage() {
           </motion.div>
 
           {/* Gallery Grid */}
-          <motion.div layout className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <AnimatePresence>
-              {filteredItems.map((item, index) => (
-                <motion.div
-                  key={item.id}
-                  layout
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 0.8 }}
-                  transition={{ duration: 0.4, delay: index * 0.1 }}
-                  className="group cursor-pointer"
-                  onClick={() => setSelectedImage(item)}
-                >
-                  <div className="relative overflow-hidden rounded-lg bg-gray-100 aspect-[4/3]">
-                    <Image
-                      src={item.image || "/placeholder.svg"}
-                      alt={item.title}
-                      fill
-                      className="object-cover transition-transform duration-300 group-hover:scale-110"
-                    />
-                    <div className="absolute inset-0 group-hover:bg-opacity-40 transition-all duration-300 flex items-end">
-                      <div className="p-6 text-white transform translate-y-full group-hover:translate-y-0 transition-transform duration-300">
-                        <h3 className="text-xl font-semibold mb-2">{item.title}</h3>
-                        <p className="text-sm opacity-90">{item.description}</p>
+          {galleryPage ? (
+            <motion.div layout className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+              <AnimatePresence>
+                {filteredItems.map((item, index) => (
+                  <motion.div
+                    key={item._key || `${item.category}-${index}`}
+                    layout
+                    initial={{ opacity: 0, scale: 0.8 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.8 }}
+                    transition={{ duration: 0.4, delay: index * 0.1 }}
+                    className="group cursor-pointer"
+                    onClick={() => setSelectedImage(item)}
+                  >
+                    <div className="relative overflow-hidden rounded-lg bg-gray-100 aspect-[4/3]">
+                      <Image
+                        src={item.image}
+                        alt={item.title}
+                        fill
+                        className="object-cover transition-transform duration-300 group-hover:scale-110"
+                      />
+                      <div className="absolute inset-0 group-hover:bg-opacity-40 transition-all duration-300 flex items-end">
+                        <div className="p-6 text-white transform translate-y-full group-hover:translate-y-0 transition-transform duration-300">
+                          <h3 className="text-xl font-semibold mb-2">{item.title}</h3>
+                          <p className="text-sm opacity-90">{item.description}</p>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                </motion.div>
-              ))}
-            </AnimatePresence>
-          </motion.div>
+                  </motion.div>
+                ))}
+              </AnimatePresence>
+            </motion.div>
+          ) : null}
         </div>
       </section>
 

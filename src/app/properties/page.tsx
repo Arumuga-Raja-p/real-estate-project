@@ -2,7 +2,7 @@
 
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { motion } from "framer-motion"
 import { PropertyCard } from "@/components/ui/property-card"
 import { PropertyFilters } from "@/components/ui/property-filters"
@@ -11,9 +11,31 @@ import RootLayout from "@/components/layout"
 import { fetchProperties } from "@/lib/property"
 
 const properties =  await fetchProperties()
+const animatedHeading = "Dream Home ..."
 
 export default function PropertiesPage() {
   const [filteredProperties, setFilteredProperties] = useState(properties)
+  const [typedHeading, setTypedHeading] = useState("")
+  const [isDeleting, setIsDeleting] = useState(false)
+
+  useEffect(() => {
+    if (!isDeleting && typedHeading === animatedHeading) {
+      const timeout = window.setTimeout(() => setIsDeleting(true), 900)
+      return () => window.clearTimeout(timeout)
+    }
+
+    if (isDeleting && typedHeading.length === 0) {
+      const timeout = window.setTimeout(() => setIsDeleting(false), 300)
+      return () => window.clearTimeout(timeout)
+    }
+
+    const timeout = window.setTimeout(() => {
+      const nextLength = typedHeading.length + (isDeleting ? -1 : 1)
+      setTypedHeading(animatedHeading.slice(0, nextLength))
+    }, isDeleting ? 70 : 110)
+
+    return () => window.clearTimeout(timeout)
+  }, [isDeleting, typedHeading])
 
   const handleFilterChange = (filters: any) => {
     let filtered = properties
@@ -59,14 +81,22 @@ export default function PropertiesPage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
-            className="relative z-10 mx-auto flex w-full max-w-5xl flex-col items-center text-center"
+            className="relative z-10 mx-auto flex w-full max-w-5xl -translate-y-8 flex-col items-center text-center sm:-translate-y-10"
           >
             <Badge className="mb-4 bg-green-100 text-green-800 hover:bg-green-200 sm:mb-6">Properties for Sale</Badge>
-            <h1 className="mb-5 max-w-4xl text-4xl font-bold leading-none text-gray-900 sm:mb-6 sm:text-5xl md:text-6xl lg:text-7xl">
+            <h1
+              className="mb-5 max-w-5xl text-4xl font-bold leading-none text-gray-900 sm:mb-6 sm:text-5xl md:text-6xl lg:text-7xl"
+              style={{
+                WebkitTextStroke: "10.5px rgba(255, 255, 255, 0.95)",
+                paintOrder: "stroke fill",
+              }}
+            >
               Find Your
-              <span className="block text-green-600">Dream Home</span>
+              <span className="ml-3 inline-flex min-w-[5.5ch] items-center text-green-600">
+                {typedHeading}
+              </span>
             </h1>
-            <p className="max-w-4xl text-base leading-relaxed text-gray-700 sm:text-lg md:text-xl">
+            <p className="max-w-4xl text-base font-semibold leading-relaxed text-gray-700 sm:text-lg md:text-xl">
               Discover exceptional properties that match your lifestyle and budget. From modern apartments to luxury
               villas, we have something for everyone.
             </p>

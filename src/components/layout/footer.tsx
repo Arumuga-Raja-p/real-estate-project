@@ -128,7 +128,7 @@ export function Footer() {
               viewport={{ once: true }}
               className="text-gray-400 text-sm mb-4 md:mb-0"
             >
-              © {new Date().getFullYear()} GreenEstate. All rights reserved.
+              © {new Date().getFullYear()} GreenEstate. All rights reserved from Adastech
             </motion.p>
             <div className="flex items-center space-x-6">
               <div className="flex space-x-4">

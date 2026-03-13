@@ -7,6 +7,7 @@ import { Bed, Bath, Square, MapPin, Eye } from "lucide-react"
 import Image from "next/image"
 import { useState } from "react"
 import { PropertyModal } from "./PropertyModal"
+import { formatINR } from "@/lib/format"
 
 interface Property {
   id: string | number
@@ -100,7 +101,7 @@ export function PropertyCard({ property }: PropertyCardProps) {
               {/* Price Display */}
               <div className="flex items-baseline space-x-1">
                 <span className="text-2xl sm:text-3xl font-bold text-green-600">
-                  ${property.price.toLocaleString()}
+                  {formatINR(property.price)}
                 </span>
                 {property.isRental && (
                   <span className="text-sm sm:text-base text-gray-500">/month</span>
