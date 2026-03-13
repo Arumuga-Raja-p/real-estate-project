@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Menu, X } from "lucide-react";
 import Image from "next/image";
 import EnquiryModal from "@/components/layout/EnquiryModal";
+import navbarLogo from "@/app/asstes/Logo.png";
 
 const navItems = [
   { href: "/", label: "Home" },
@@ -59,15 +60,31 @@ export function Navigation() {
             scrolled ? "bg-white/95 backdrop-blur-md shadow-lg" : "bg-transparent"
           }`}
         >
-          <div className="container max-w-7xl mx-auto px-4">
-            <div className="flex items-center justify-between h-20">
+          <div className="mx-auto w-full px-4 lg:px-8">
+            <div className="flex h-20 items-center">
               {/* Logo */}
-              <Link href="/" className="flex items-center space-x-2">
-                <Image src={"/Logo.png"} height={80} width={90} alt={"Logo"} />
-                <Image src={"/greenlogo.png"} height={70} width={250} alt={"Logo"} />              </Link>
+              <Link href="/" className="flex shrink-0 items-center gap-3">
+                <Image
+                  src={navbarLogo}
+                  width={280}
+                  height={108}
+                  alt="Green Homes logo"
+                  priority
+                  className="relative top-2 -ml-2 h-16 w-auto object-contain sm:h-24"
+                />
+                <div className="flex flex-col leading-none">
+                  <span className="text-lg font-bold tracking-[0.22em] text-gray-900 uppercase sm:text-xl">
+                    Green Homes
+                  </span>
+                  <span className="mt-1 text-center text-xs font-semibold tracking-[0.4em] text-green-700 uppercase sm:text-sm">
+                    Construction
+                  </span>
+                </div>
+              </Link>
 
               {/* Desktop Navigation */}
-              <div className="hidden lg:flex items-center space-x-8">
+              <div className="hidden flex-1 items-center justify-center lg:flex">
+                <div className="flex items-center space-x-8 xl:space-x-10">
                 {navItems.map((item) => (
                   <Link
                     key={item.href}
@@ -85,10 +102,11 @@ export function Navigation() {
                     )}
                   </Link>
                 ))}
+                </div>
               </div>
 
               {/* Desktop CTA Buttons */}
-              <div className="hidden lg:flex items-center space-x-4">
+              <div className="hidden items-center space-x-4 pl-8 lg:flex xl:pl-10">
                 <Link
                   href="https://wa.me/919841886699"
                   target="_blank"
@@ -113,7 +131,7 @@ export function Navigation() {
               <Button
                 variant="ghost"
                 size="sm"
-                className="lg:hidden"
+                className="ml-auto lg:hidden"
                 onClick={() => setIsOpen(!isOpen)}
               >
                 {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}

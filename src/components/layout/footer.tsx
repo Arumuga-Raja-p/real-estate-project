@@ -4,6 +4,7 @@ import { motion } from "framer-motion"
 import Link from "next/link"
 import {  MapPin, Phone, Mail, Facebook, Twitter, Instagram, Linkedin } from "lucide-react"
 import Image from "next/image"
+import footerLogo from "@/app/asstes/Logo.png"
 
 const footerLinks = {
   company: [
@@ -43,10 +44,16 @@ export function Footer() {
             className="lg:max-w-2xl"
           >
             <Link href="/" className="flex items-center space-x-2 mb-6">
-              <div className="w-10 h-10 bg-white rounded-lg flex items-center justify-center">
-                <Image src={'/Logo.png'} height={40} width={40} alt={"Logo"}/>
+              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-white">
+                <Image
+                  src={footerLogo}
+                  height={60}
+                  width={60}
+                  alt="Green Homes logo"
+                  className="h-12 w-auto object-contain"
+                />
               </div>
-              <span className="text-2xl font-bold hover:text-green-400 transition-colors">Green Homes</span>
+              <span className="text-2xl font-bold hover:text-green-400 transition-colors">Green Homes Construction</span>
             </Link>
             <p className="text-gray-400 mb-6 leading-relaxed ">
               Your trusted partner in real estate. We help you find the perfect property and provide comprehensive real

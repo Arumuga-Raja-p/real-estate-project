@@ -40,36 +40,37 @@ export default function PropertiesPage() {
 
   return (
     <RootLayout>
-      <div className="pt-20">
+      <div>
       {/* Hero Section */}
-      <section className="py">
-        <div className="relative h-[600px] overflow-hidden flex items-center justify-center">
+      <section className="relative flex min-h-[100svh] min-h-[100dvh] items-center justify-center overflow-hidden px-4 pb-10 pt-28 sm:px-6 sm:pb-12 sm:pt-32 lg:px-8">
           <video
-            className="absolute inset-0 w-full h-full object-cover opacity-40 z-0"
+            className="pointer-events-none absolute inset-0 h-full w-full object-cover"
             autoPlay
             muted
             loop
             playsInline
+            aria-hidden="true"
           >
             <source src="/about/v3.mp4" type="video/mp4" />
           </video>
+          <div className="absolute inset-0 bg-white/55 sm:bg-white/45" />
+          <div className="absolute inset-0 bg-gradient-to-b from-white/20 via-transparent to-white/30" />
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
-            className="text-center max-w-4xl mx-auto z-30"
+            className="relative z-10 mx-auto flex w-full max-w-5xl flex-col items-center text-center"
           >
-            <Badge className="mb-4 bg-green-100 text-green-800 hover:bg-green-200">Properties for Sale</Badge>
-            <h1 className="text-4xl md:text-6xl font-bold text-gray-900 mb-6">
+            <Badge className="mb-4 bg-green-100 text-green-800 hover:bg-green-200 sm:mb-6">Properties for Sale</Badge>
+            <h1 className="mb-5 max-w-4xl text-4xl font-bold leading-none text-gray-900 sm:mb-6 sm:text-5xl md:text-6xl lg:text-7xl">
               Find Your
-              <span className="text-green-600"> Dream Home</span>
+              <span className="block text-green-600">Dream Home</span>
             </h1>
-            <p className="text-xl text-gray-600 leading-relaxed">
+            <p className="max-w-4xl text-base leading-relaxed text-gray-700 sm:text-lg md:text-xl">
               Discover exceptional properties that match your lifestyle and budget. From modern apartments to luxury
               villas, we have something for everyone.
             </p>
           </motion.div>
-        </div>
       </section>
 
       {/* Properties Section */}

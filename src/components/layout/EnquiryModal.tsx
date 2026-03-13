@@ -3,22 +3,18 @@
 
 import { useState, useRef, useEffect } from "react"
 import { motion } from "framer-motion"
+import { EnquiryFormFields } from "@/components/forms/enquiry-form-fields"
 import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Textarea } from "@/components/ui/textarea"
 import { Badge } from "@/components/ui/badge"
+import {
+  INITIAL_ENQUIRY_FORM_DATA,
+  type EnquiryFormData,
+} from "@/lib/enquiry-form"
 import { sendEnquiryEmail } from "@/lib/send-enquiry-email"
 import { X, Send} from "lucide-react"
 
 export default function EnquiryModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    phone: "",
-    inquiry: "",
-    subject: "",
-    message: "",
-  })
+  const [formData, setFormData] = useState<EnquiryFormData>(INITIAL_ENQUIRY_FORM_DATA)
 
   const [loading, setLoading] = useState(false)
   const [sent, setSent] = useState(false)
@@ -40,21 +36,14 @@ export default function EnquiryModal({ isOpen, onClose }: { isOpen: boolean; onC
         name: formData.name,
         email: formData.email,
         phone: formData.phone,
-        inquiryType: formData.inquiry,
+        inquiryType: formData.inquiryType,
         subject: formData.subject,
         message: formData.message,
         source: "quick-enquiry-modal",
       })
 
       setSent(true)
-      setFormData({
-        name: "",
-        email: "",
-        phone: "",
-        inquiry: "",
-        subject: "",
-        message: "",
-      })
+      setFormData(INITIAL_ENQUIRY_FORM_DATA)
     } catch (submitError) {
       const message = submitError instanceof Error ? submitError.message : "Failed to send message. Try again."
       setError(message)
@@ -160,106 +149,15 @@ export default function EnquiryModal({ isOpen, onClose }: { isOpen: boolean; onC
             </motion.div>
           ) : (
             <form onSubmit={handleSubmit} className="space-y-4">
-              <div>
-                <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2 group-hover:text-gray-900 transition-colors duration-300">
-                  Full Name *
-                </label>
-                <Input
-                  id="name"
-                  name="name"
-                  type="text"
-                  placeholder="Your full name"
-                  value={formData.name}
-                  onChange={handleChange}
-                  required
-                  className="border-gray-300 focus:border-green-500 focus:ring-green-500 transition-colors duration-300"
-                />
-              </div>
-
-              <div>
-                <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2 group-hover:text-gray-900 transition-colors duration-300">
-                  Email Address *
-                </label>
-                <Input
-                  id="email"
-                  name="email"
-                  type="email"
-                  placeholder="your.email@example.com"
-                  value={formData.email}
-                  onChange={handleChange}
-                  required
-                  className="border-gray-300 focus:border-green-500 focus:ring-green-500 transition-colors duration-300"
-                />
-              </div>
-
-              <div>
-                <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-2 group-hover:text-gray-900 transition-colors duration-300">
-                  Phone Number
-                </label>
-                <Input
-                  id="phone"
-                  name="phone"
-                  type="tel"
-                  placeholder="+91-9543326699"
-                  value={formData.phone}
-                  onChange={handleChange}
-                  className="border-gray-300 focus:border-green-500 focus:ring-green-500 transition-colors duration-300"
-                />
-              </div>
-
-              <div>
-                <label htmlFor="inquiry" className="block text-sm font-medium text-gray-700 mb-2 group-hover:text-gray-900 transition-colors duration-300">
-                  Inquiry Type *
-                </label>
-                <select
-                  id="inquiry"
-                  name="inquiry"
-                  value={formData.inquiry}
-                  onChange={handleChange}
-                  required
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition-colors duration-300"
-                >
-                  <option value="">Select Inquiry Type</option>
-                  <option value="buy">Buying Property</option>
-                  <option value="sell">Selling Property</option>
-                  <option value="construction">Building Construction</option>
-                  <option value="management">Property Management</option>
-                  <option value="consultation">Free Consultation</option>
-                  <option value="other">Others</option>
-                </select>
-              </div>
-
-              <div>
-                <label htmlFor="subject" className="block text-sm font-medium text-gray-700 mb-2 group-hover:text-gray-900 transition-colors duration-300">
-                  Subject *
-                </label>
-                <Input
-                  id="subject"
-                  name="subject"
-                  type="text"
-                  placeholder="Brief subject of your inquiry"
-                  value={formData.subject}
-                  onChange={handleChange}
-                  required
-                  className="border-gray-300 focus:border-green-500 focus:ring-green-500 transition-colors duration-300"
-                />
-              </div>
-
-              <div>
-                <label htmlFor="message" className="block text-sm font-medium text-gray-700 mb-2 group-hover:text-gray-900 transition-colors duration-300">
-                  Message *
-                </label>
-                <Textarea
-                  id="message"
-                  name="message"
-                  placeholder="Please provide details about your inquiry..."
-                  rows={4}
-                  value={formData.message}
-                  onChange={handleChange}
-                  required
-                  className="resize-none border-gray-300 focus:border-green-500 focus:ring-green-500 transition-colors duration-300"
-                />
-              </div>
+              <EnquiryFormFields
+                formData={formData}
+                onChange={handleChange}
+                messageRows={4}
+                labelClassName="block text-sm font-medium text-gray-700 mb-2 group-hover:text-gray-900 transition-colors duration-300"
+                inputClassName="border-gray-300 focus:border-green-500 focus:ring-green-500 transition-colors duration-300"
+                selectClassName="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition-colors duration-300"
+                textareaClassName="resize-none border-gray-300 focus:border-green-500 focus:ring-green-500 transition-colors duration-300"
+              />
 
               <Button
                 type="submit"

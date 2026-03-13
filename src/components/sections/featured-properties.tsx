@@ -126,7 +126,7 @@ export function FeaturedProperties() {
           className="text-center mb-12"
         >
           <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-            Properties
+            Featured Properties
           </h2>
           <p className="text-xl text-gray-600 max-w-2xl mx-auto">
             Discover our premium selection of real estate listings

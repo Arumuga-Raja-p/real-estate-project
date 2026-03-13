@@ -6,21 +6,16 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import {
   MapPin,
   Phone,
   Mail,
   Clock,
-  MessageSquare,
-  User,
-  Building,
 } from "lucide-react";
 import RootLayout from "@/components/layout";
+import { EnquiryFormFields } from "@/components/forms/enquiry-form-fields";
 import { sendEnquiryEmail } from "@/lib/send-enquiry-email";
-
 const contactInfo = [
   {
     icon: MapPin,
@@ -60,24 +55,15 @@ const contactInfo = [
   },
 ];
 
-const inquiryTypes = [
-  { value: "buying", label: "Buying Property", icon: Building },
-  { value: "selling", label: "Selling Property", icon: Building },
-  { value: "construction", label: "Building Construction", icon: Building },
-  { value: "management", label: "Property Management", icon: Building },
-  { value: "consultation", label: "Free Consultation", icon: User },
-  { value: "other", label: "Other", icon: MessageSquare },
-];
+import {
+  INITIAL_ENQUIRY_FORM_DATA,
+  type EnquiryFormData,
+} from "@/lib/enquiry-form";
 
 export default function ContactPage() {
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    phone: "",
-    inquiryType: "",
-    subject: "",
-    message: "",
-  });
+  const [formData, setFormData] = useState<EnquiryFormData>(
+    INITIAL_ENQUIRY_FORM_DATA
+  );
 
   const handleActionClick = (info: typeof contactInfo[0]) => {
     // Open links or trigger actions based on type
@@ -122,14 +108,7 @@ export default function ContactPage() {
         source: "contact-page",
       });
 
-      setFormData({
-        name: "",
-        email: "",
-        phone: "",
-        inquiryType: "",
-        subject: "",
-        message: "",
-      });
+      setFormData(INITIAL_ENQUIRY_FORM_DATA);
       setSubmitSuccess(
         "Thank you for your inquiry! We will get back to you within 24 hours."
       );
@@ -413,125 +392,15 @@ export default function ContactPage() {
                   </CardHeader>
                   <CardContent className="relative z-10">
                     <form onSubmit={handleSubmit} className="space-y-6">
-                      <div className="grid md:grid-cols-2 gap-4">
-                        <div>
-                          <label
-                            htmlFor="name"
-                            className="block text-sm font-medium text-gray-700 mb-2 group-hover:text-gray-900 transition-colors duration-300"
-                          >
-                            Full Name *
-                          </label>
-                          <Input
-                            id="name"
-                            name="name"
-                            type="text"
-                            required
-                            value={formData.name}
-                            onChange={handleInputChange}
-                            placeholder="Your full name"
-                            className="border-gray-300 focus:border-green-500 focus:ring-green-500 transition-colors duration-300"
-                          />
-                        </div>
-                        <div>
-                          <label
-                            htmlFor="email"
-                            className="block text-sm font-medium text-gray-700 mb-2 group-hover:text-gray-900 transition-colors duration-300"
-                          >
-                            Email Address *
-                          </label>
-                          <Input
-                            id="email"
-                            name="email"
-                            type="email"
-                            required
-                            value={formData.email}
-                            onChange={handleInputChange}
-                            placeholder="your.email@example.com"
-                            className="border-gray-300 focus:border-green-500 focus:ring-green-500 transition-colors duration-300"
-                          />
-                        </div>
-                      </div>
-
-                      <div className="grid md:grid-cols-2 gap-4">
-                        <div>
-                          <label
-                            htmlFor="phone"
-                            className="block text-sm font-medium text-gray-700 mb-2 group-hover:text-gray-900 transition-colors duration-300"
-                          >
-                            Phone Number
-                          </label>
-                          <Input
-                            id="phone"
-                            name="phone"
-                            type="tel"
-                            value={formData.phone}
-                            onChange={handleInputChange}
-                            placeholder="+91-9543326699"
-                            className="border-gray-300 focus:border-green-500 focus:ring-green-500 transition-colors duration-300"
-                          />
-                        </div>
-                        <div>
-                          <label
-                            htmlFor="inquiryType"
-                            className="block text-sm font-medium text-gray-700 mb-2 group-hover:text-gray-900 transition-colors duration-300"
-                          >
-                            Inquiry Type *
-                          </label>
-                          <select
-                            id="inquiryType"
-                            name="inquiryType"
-                            required
-                            value={formData.inquiryType}
-                            onChange={handleInputChange}
-                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition-colors duration-300"
-                          >
-                            <option value="">Select inquiry type</option>
-                            {inquiryTypes.map((type) => (
-                              <option key={type.value} value={type.value}>
-                                {type.label}
-                              </option>
-                            ))}
-                          </select>
-                        </div>
-                      </div>
-
-                      <div>
-                        <label
-                          htmlFor="subject"
-                          className="block text-sm font-medium text-gray-700 mb-2 group-hover:text-gray-900 transition-colors duration-300"
-                        >
-                          Subject *
-                        </label>
-                        <Input
-                          id="subject"
-                          name="subject"
-                          type="text"
-                          required
-                          value={formData.subject}
-                          onChange={handleInputChange}
-                          placeholder="Brief subject of your inquiry"
-                          className="border-gray-300 focus:border-green-500 focus:ring-green-500 transition-colors duration-300"
-                        />
-                      </div>
-
-                      <div>
-                        <label
-                          htmlFor="message"
-                          className="block text-sm font-medium text-gray-700 mb-2 group-hover:text-gray-900 transition-colors duration-300"
-                        >
-                          Message *
-                        </label>
-                        <Textarea
-                          id="message"
-                          name="message"
-                          required
-                          rows={6}
-                          value={formData.message}
-                          onChange={handleInputChange}
-                          placeholder="Please provide details about your inquiry..."
-                          className="resize-none border-gray-300 focus:border-green-500 focus:ring-green-500 transition-colors duration-300"
-                        />
-                      </div>
+                      <EnquiryFormFields
+                        formData={formData}
+                        onChange={handleInputChange}
+                        messageRows={6}
+                        labelClassName="block text-sm font-medium text-gray-700 mb-2 group-hover:text-gray-900 transition-colors duration-300"
+                        inputClassName="border-gray-300 focus:border-green-500 focus:ring-green-500 transition-colors duration-300"
+                        selectClassName="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition-colors duration-300"
+                        textareaClassName="resize-none border-gray-300 focus:border-green-500 focus:ring-green-500 transition-colors duration-300"
+                      />
 
                       <Button
                         type="submit"
