@@ -2,7 +2,7 @@
 
 import type React from "react";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -15,62 +15,77 @@ import {
 } from "lucide-react";
 import RootLayout from "@/components/layout";
 import { EnquiryFormFields } from "@/components/forms/enquiry-form-fields";
+import {
+  CONTACT_SECTION_FALLBACK,
+  fetchContactSection,
+  type ContactCard,
+} from "@/lib/contact";
 import { sendEnquiryEmail } from "@/lib/send-enquiry-email";
-const contactInfo = [
-  {
-    icon: MapPin,
-    title: "Visit Our Office",
-    details: [
-      "No:15, Govindarajapuram 2nd street",
-      "Nellikappam Road, Guduvanchery",
-      "Chennai - 603 202",
-    ],
-    action: "Get Directions",
-    type: "map",
-    link: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3890.1525970129046!2d80.0656730751205!3d12.833414087469428!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3a52f7fad02d1cab%3A0x6a72cf4412509946!2sGreen%20Homes!5e0!3m2!1sen!2sin!4v1753284330618!5m2!1sen!2sin",
-  },
-  {
-    icon: Phone,
-    title: "Call Us",
-    details: ["+91-9543326699", "+91-9841886699"],
-    action: "Call Now",
-    type: "call",
-    link: "tel:+919543326699",
-  },
-  {
-    icon: Mail,
-    title: "Email Us",
-    details: ["ramesh@greenhouseproperty.com", "support@greenestate.com"],
-    action: "Send Email",
-    type: "email",
-    link: "mailto:ramesh@greenhouseproperty.com",
-  },
-  {
-    icon: Clock,
-    title: "Business Hours",
-    details: ["Mon - Fri: 9:00 AM - 6:00 PM", "Sat - Sun: 10:00 AM - 4:00 PM"],
-    action: "Schedule Visit",
-    type: "schedule",
-    link: "https://calendar.google.com",
-  },
-];
 
 import {
   INITIAL_ENQUIRY_FORM_DATA,
   type EnquiryFormData,
 } from "@/lib/enquiry-form";
 
+const CONTACT_ICON_MAP: Record<ContactCard["type"], typeof MapPin> = {
+  office: MapPin,
+  phone: Phone,
+  email: Mail,
+  hours: Clock,
+};
+
+type ContactInfo = ContactCard & {
+  icon: typeof MapPin;
+};
+
+const FALLBACK_CONTACT_INFO: ContactInfo[] = CONTACT_SECTION_FALLBACK.contactCards.map(
+  (card) => ({
+    ...card,
+    icon: CONTACT_ICON_MAP[card.type],
+  })
+);
+
 export default function ContactPage() {
+  const [contactInfo, setContactInfo] =
+    useState<ContactInfo[]>(FALLBACK_CONTACT_INFO);
   const [formData, setFormData] = useState<EnquiryFormData>(
     INITIAL_ENQUIRY_FORM_DATA
   );
 
-  const handleActionClick = (info: typeof contactInfo[0]) => {
-    // Open links or trigger actions based on type
-    if (info.type === "map" || info.type === "schedule") {
-      window.open(info.link, "_blank");
-    } else if (info.type === "call" || info.type === "email") {
-      window.location.href = info.link;
+  useEffect(() => {
+    let isMounted = true;
+
+    fetchContactSection()
+      .then((data) => {
+        if (!isMounted || !data?.contactCards?.length) {
+          return;
+        }
+
+        setContactInfo(
+          data.contactCards.map((card) => ({
+            ...card,
+            icon: CONTACT_ICON_MAP[card.type],
+          }))
+        );
+      })
+      .catch(() => {
+        // Keep the fallback values when CMS data is unavailable.
+      });
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
+  const officeInfo =
+    contactInfo.find((info) => info.type === "office") ?? FALLBACK_CONTACT_INFO[0];
+  const hoursInfo = contactInfo.find((info) => info.type === "hours");
+
+  const handleActionClick = (info: ContactInfo) => {
+    if (info.type === "office" || info.type === "hours") {
+      window.open(info.actionLink, "_blank", "noopener,noreferrer");
+    } else if (info.type === "phone" || info.type === "email") {
+      window.location.href = info.actionLink;
     }
   };
 
@@ -325,7 +340,7 @@ export default function ContactPage() {
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
               {contactInfo.map((info, index) => (
                 <motion.div
-                  key={index}
+                  key={info._key ?? info.type}
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.6, delay: index * 0.1 }}
@@ -368,7 +383,7 @@ export default function ContactPage() {
                           onClick={() => handleActionClick(info)}
                           className="border-green-600 text-green-600 hover:bg-green-600 hover:text-white transition-all duration-300 group-hover:scale-105"
                         >
-                          {info.action}
+                          {info.actionLabel}
                         </Button>
                       </div>
                     </CardContent>
@@ -461,13 +476,13 @@ export default function ContactPage() {
 
                   <CardHeader className="relative z-10">
                     <CardTitle className="text-2xl group-hover:text-green-600 transition-colors duration-300">
-                      Visit Our Office
+                      {officeInfo.title}
                     </CardTitle>
                   </CardHeader>
                   <CardContent className="relative z-10">
                     <div className="aspect-video bg-gray-200 rounded-lg mb-6 overflow-hidden group-hover:shadow-md transition-shadow duration-300">
                       <iframe
-                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3890.1525970129046!2d80.0656730751205!3d12.833414087469428!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3a52f7fad02d1cab%3A0x6a72cf4412509946!2sGreen%20Homes!5e0!3m2!1sen!2sin!4v1753284330618!5m2!1sen!2sin"
+                        src={officeInfo.embedUrl || officeInfo.actionLink}
                         width="100%"
                         height="100%"
                         style={{ border: 0 }}
@@ -481,31 +496,28 @@ export default function ContactPage() {
                       <div className="flex items-start space-x-3 p-3 rounded-lg hover:bg-gray-50 transition-colors duration-300 group/item">
                         <MapPin className="w-5 h-5 text-green-600 mt-1 group-hover/item:scale-110 transition-transform duration-300" />
                         <div>
-                          <p className="font-medium text-gray-900">
-                            No:15, Govindarajapuram 2nd street,
-                          </p>
-                          <p className="font-medium text-gray-900">
-                            Nellikappam Road, Guduvanchery,
-                          </p>
-                          <p className="font-medium text-gray-900">
-                            Chennai-603 202
-                          </p>
+                          {officeInfo.details.map((detail) => (
+                            <p key={detail} className="font-medium text-gray-900">
+                              {detail}
+                            </p>
+                          ))}
                         </div>
                       </div>
-                      <div className="flex items-start space-x-3 p-3 rounded-lg hover:bg-gray-50 transition-colors duration-300 group/item">
-                        <Clock className="w-5 h-5 text-green-600 mt-1 group-hover/item:scale-110 transition-transform duration-300" />
-                        <div>
-                          <p className="font-medium text-gray-900">
-                            Office Hours
-                          </p>
-                          <p className="text-gray-600">
-                            Monday - Friday: 9:00 AM - 6:00 PM
-                          </p>
-                          <p className="text-gray-600">
-                            Saturday - Sunday: 10:00 AM - 4:00 PM
-                          </p>
+                      {hoursInfo ? (
+                        <div className="flex items-start space-x-3 p-3 rounded-lg hover:bg-gray-50 transition-colors duration-300 group/item">
+                          <Clock className="w-5 h-5 text-green-600 mt-1 group-hover/item:scale-110 transition-transform duration-300" />
+                          <div>
+                            <p className="font-medium text-gray-900">
+                              {hoursInfo.title}
+                            </p>
+                            {hoursInfo.details.map((detail) => (
+                              <p key={detail} className="text-gray-600">
+                                {detail}
+                              </p>
+                            ))}
+                          </div>
                         </div>
-                      </div>
+                      ) : null}
                     </div>
                   </CardContent>
                 </Card>
