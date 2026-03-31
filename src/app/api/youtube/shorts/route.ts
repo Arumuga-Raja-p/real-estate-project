@@ -29,6 +29,8 @@ interface YouTubeVideoItem {
 const YOUTUBE_API_BASE = "https://www.googleapis.com/youtube/v3";
 const DEFAULT_CHANNEL_HANDLE = "greenhomesproperty";
 const SHORTS_MAX_DURATION_SECONDS = 180;
+const SEARCH_PAGE_SIZE = 25;
+const MAX_SEARCH_RESULTS_TO_SCAN = 100;
 
 function durationToSeconds(isoDuration?: string): number {
   if (!isoDuration) return 0;
@@ -60,6 +62,16 @@ function pickThumbnail(item: YouTubeVideoItem): string {
     item.snippet?.thumbnails?.default?.url ||
     `https://i.ytimg.com/vi/${item.id}/hqdefault.jpg`
   );
+}
+
+function chunkArray<T>(items: T[], size: number): T[][] {
+  const chunks: T[][] = [];
+
+  for (let index = 0; index < items.length; index += size) {
+    chunks.push(items.slice(index, index + size));
+  }
+
+  return chunks;
 }
 
 async function fetchJson<T>(url: string): Promise<T> {
@@ -116,35 +128,77 @@ export async function GET(request: Request) {
 
     const channelId = await resolveChannelId(apiKey);
 
-    const searchUrl = new URL(`${YOUTUBE_API_BASE}/search`);
-    searchUrl.searchParams.set("part", "id");
-    searchUrl.searchParams.set("channelId", channelId);
-    searchUrl.searchParams.set("type", "video");
-    searchUrl.searchParams.set("order", "date");
-    searchUrl.searchParams.set("maxResults", "25");
-    searchUrl.searchParams.set("key", apiKey);
+    const videoIds: string[] = [];
+    let nextPageToken: string | undefined;
 
-    const searchData = await fetchJson<{ items?: YouTubeSearchItem[] }>(
-      searchUrl.toString()
-    );
-    const videoIds = (searchData.items || [])
-      .map((item) => item.id?.videoId)
-      .filter((id): id is string => Boolean(id));
+    while (videoIds.length < MAX_SEARCH_RESULTS_TO_SCAN) {
+      const searchUrl = new URL(`${YOUTUBE_API_BASE}/search`);
+      searchUrl.searchParams.set("part", "id");
+      searchUrl.searchParams.set("channelId", channelId);
+      searchUrl.searchParams.set("type", "video");
+      searchUrl.searchParams.set("order", "date");
+      searchUrl.searchParams.set("maxResults", `${SEARCH_PAGE_SIZE}`);
+      searchUrl.searchParams.set("key", apiKey);
+
+      if (nextPageToken) {
+        searchUrl.searchParams.set("pageToken", nextPageToken);
+      }
+
+      const searchData = await fetchJson<{
+        items?: YouTubeSearchItem[];
+        nextPageToken?: string;
+      }>(searchUrl.toString());
+
+      const pageVideoIds = (searchData.items || [])
+        .map((item) => item.id?.videoId)
+        .filter((id): id is string => Boolean(id));
+
+      if (pageVideoIds.length === 0) {
+        break;
+      }
+
+      for (const videoId of pageVideoIds) {
+        if (!videoIds.includes(videoId)) {
+          videoIds.push(videoId);
+        }
+      }
+
+      nextPageToken = searchData.nextPageToken;
+      if (!nextPageToken) {
+        break;
+      }
+    }
 
     if (videoIds.length === 0) {
       return NextResponse.json({ items: [] });
     }
 
-    const videosUrl = new URL(`${YOUTUBE_API_BASE}/videos`);
-    videosUrl.searchParams.set("part", "snippet,contentDetails,statistics");
-    videosUrl.searchParams.set("id", videoIds.join(","));
-    videosUrl.searchParams.set("key", apiKey);
-
-    const videosData = await fetchJson<{ items?: YouTubeVideoItem[] }>(
-      videosUrl.toString()
+    const limitedVideoIds = videoIds.slice(0, MAX_SEARCH_RESULTS_TO_SCAN);
+    const videoOrder = new Map(
+      limitedVideoIds.map((videoId, index) => [videoId, index])
     );
+    const videoChunks = chunkArray(limitedVideoIds, 50);
+    const videoItems: YouTubeVideoItem[] = [];
 
-    const items = (videosData.items || [])
+    for (const videoChunk of videoChunks) {
+      const videosUrl = new URL(`${YOUTUBE_API_BASE}/videos`);
+      videosUrl.searchParams.set("part", "snippet,contentDetails,statistics");
+      videosUrl.searchParams.set("id", videoChunk.join(","));
+      videosUrl.searchParams.set("key", apiKey);
+
+      const videosData = await fetchJson<{ items?: YouTubeVideoItem[] }>(
+        videosUrl.toString()
+      );
+
+      videoItems.push(...(videosData.items || []));
+    }
+
+    const items = videoItems
+      .sort(
+        (left, right) =>
+          (videoOrder.get(left.id) ?? Number.MAX_SAFE_INTEGER) -
+          (videoOrder.get(right.id) ?? Number.MAX_SAFE_INTEGER)
+      )
       .filter((item) => {
         const duration = durationToSeconds(item.contentDetails?.duration);
         const title = item.snippet?.title?.toLowerCase() || "";

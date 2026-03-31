@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -20,21 +20,8 @@ const navItems = [
 ];
 
 export function Navigation() {
-  const [scrolled, setScrolled] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const pathname = usePathname();
-
-  useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 50);
-    };
-
-    window.addEventListener("scroll", handleScroll);
-
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, []);
 
   return (
     <>
@@ -47,9 +34,7 @@ export function Navigation() {
           initial={{ y: -100 }}
           animate={{ y: 0 }}
           transition={{ duration: 0.6 }}
-          className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-            scrolled ? "bg-white/95 backdrop-blur-md shadow-lg" : "bg-transparent"
-          }`}
+          className="fixed top-0 left-0 right-0 z-50 border-b border-gray-100 bg-white"
         >
           <div className="mx-auto w-full px-4 lg:px-8">
             <div className="flex h-20 items-center">

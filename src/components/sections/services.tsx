@@ -90,7 +90,7 @@ export function Services() {
           </p>
         </motion.div>
 
-        <div className="grid md:grid-cols-3 lg:grid-cols-4 gap-8">
+        <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
           {services.map((service, index) => (
             <motion.div
               key={index}

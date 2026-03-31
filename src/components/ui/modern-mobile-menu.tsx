@@ -228,7 +228,7 @@ const ModernMobileMenu: React.FC<ModernMobileMenuProps> = ({ onEnquire, classNam
     <>
       <div
         className={cn(
-          "fixed inset-x-0 bottom-0 z-40 border-t bg-white/95 backdrop-blur lg:hidden",
+          "fixed inset-x-0 bottom-0 z-40 bg-white/95 backdrop-blur lg:hidden",
           "pb-[env(safe-area-inset-bottom)]",
           className,
         )}
@@ -264,7 +264,7 @@ const ModernMobileMenu: React.FC<ModernMobileMenuProps> = ({ onEnquire, classNam
             </div>
 
           {/* Center */}
-          <div className="pointer-events-none absolute left-1/2 top-0 -translate-x-1/2 -translate-y-1/2">
+          <div className="pointer-events-none absolute left-1/2 top-0 -translate-x-1/2 -translate-y-[32%]">
             <button
               type="button"
               onClick={onEnquire}

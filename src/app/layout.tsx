@@ -29,7 +29,7 @@ export default function RootLayout({
         className={`${geistSans.variable} antialiased`}
       >
         <Navigation />
-        <main className="min-h-screen pb-24 lg:pb-0">{children}</main>
+        <main className="min-h-screen">{children}</main>
         <Footer />
         <SocialIconsComponent/>
         <EnquiryButton />
