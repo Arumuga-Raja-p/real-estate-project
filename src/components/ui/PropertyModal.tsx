@@ -8,19 +8,10 @@ import Image from "next/image"
 // import { useRouter } from "next/navigation"
 import { useState } from "react"
 import { formatINR } from "@/lib/format"
+import type { Property as SanityProperty } from "@/lib/property"
 
-interface Property {
-  id: string | number
-  title: string
-  price: number
-  location: string
-  bedrooms: number
-  bathrooms: number
-  area: number
-  images: { url: string }[]
-  type: string
-  status: string
-  featured?: boolean
+type Property = SanityProperty & {
+  id?: string | number
   isRental?: boolean
 }
 

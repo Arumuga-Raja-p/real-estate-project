@@ -5,6 +5,7 @@ import { Navigation } from "@/components/layout/navigation";
 import { Footer } from "@/components/layout/footer";
 import EnquiryButton from "@/components/ui/EnquiryButton";
 import SocialIconsComponent from "@/components/layout/socialMedia";
+import { absoluteUrl, defaultKeywords, siteConfig } from "@/lib/seo";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -12,10 +13,61 @@ const geistSans = Geist({
 });
 
 export const metadata: Metadata = {
-  title: "Green Homes - Premium Real Estate Solutions",
-  description:
-    "Find your dream home with Green Homes. Premium properties, expert service, and comprehensive real estate solutions.",
-  keywords: "real estate, properties, homes, apartments, buy, sell, rent, property management",
+  metadataBase: new URL(siteConfig.url),
+  title: {
+    default: "Green Homes Construction | Real Estate in Guduvanchery, Chennai",
+    template: "%s | Green Homes Construction",
+  },
+  description: siteConfig.description,
+  keywords: [...defaultKeywords],
+  applicationName: siteConfig.name,
+  alternates: {
+    canonical: "/",
+  },
+  category: "Real Estate",
+  authors: [{ name: siteConfig.name }],
+  creator: siteConfig.name,
+  publisher: siteConfig.name,
+  referrer: "origin-when-cross-origin",
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+      "max-video-preview": -1,
+    },
+  },
+  openGraph: {
+    type: "website",
+    locale: siteConfig.locale,
+    url: siteConfig.url,
+    siteName: siteConfig.name,
+    title: "Green Homes Construction | Real Estate in Guduvanchery, Chennai",
+    description: siteConfig.description,
+    images: [
+      {
+        url: absoluteUrl(siteConfig.ogImage),
+        width: 1200,
+        height: 630,
+        alt: "Green Homes Construction",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Green Homes Construction | Real Estate in Guduvanchery, Chennai",
+    description: siteConfig.description,
+    images: [absoluteUrl(siteConfig.ogImage)],
+  },
+  icons: {
+    icon: "/galary/green_favicon.png",
+    shortcut: "/galary/green_favicon.png",
+    apple: "/galary/green_favicon.png",
+    other: [{ rel: "icon", url: "/galary/green_favicon.png" }],
+  },
 }
 
 export default function RootLayout({
@@ -23,11 +75,35 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const localBusinessSchema = {
+    "@context": "https://schema.org",
+    "@type": "RealEstateAgent",
+    name: siteConfig.name,
+    url: siteConfig.url,
+    image: absoluteUrl(siteConfig.ogImage),
+    logo: absoluteUrl("/galary/green%20favicon.svg"),
+    description: siteConfig.description,
+    telephone: siteConfig.phones,
+    email: siteConfig.email,
+    address: {
+      "@type": "PostalAddress",
+      ...siteConfig.address,
+    },
+    areaServed: ["Guduvanchery", "Chennai", "Tamil Nadu"],
+    sameAs: [...siteConfig.sameAs],
+  }
+
   return (
     <html lang="en">
       <body
         className={`${geistSans.variable} antialiased`}
       >
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(localBusinessSchema),
+          }}
+        />
         <Navigation />
         <main className="min-h-screen">{children}</main>
         <Footer />

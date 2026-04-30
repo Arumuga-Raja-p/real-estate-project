@@ -8,19 +8,10 @@ import Image from "next/image"
 import { useState } from "react"
 import { PropertyModal } from "./PropertyModal"
 import { formatINR } from "@/lib/format"
+import type { Property as SanityProperty } from "@/lib/property"
 
-interface Property {
-  id: string | number
-  title: string
-  price: number
-  location: string
-  bedrooms: number
-  bathrooms: number
-  area: number
-  images: { url: string }[]
-  type: string
-  status: string
-  featured?: boolean
+type Property = SanityProperty & {
+  id?: string | number
   isRental?: boolean
 }
 
@@ -56,7 +47,7 @@ export function PropertyCard({ property }: PropertyCardProps) {
           {/* Vertical Image Container - Responsive Heights - No Gap */}
           <div className="relative w-full h-56 xs:h-64 sm:h-72 md:h-80 lg:h-96 overflow-hidden rounded-t-lg">
             <Image
-              key={property.id}
+              key={property._id ?? property.id ?? property.title}
               src={property.images?.[0]?.url || "/placeholder.svg"}
               alt={property.title}
               fill
