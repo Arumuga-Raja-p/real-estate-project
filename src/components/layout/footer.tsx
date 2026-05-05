@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion"
 import Link from "next/link"
-import {  MapPin, Phone, Mail, Facebook, Twitter, Instagram, Linkedin } from "lucide-react"
+import { MapPin, Phone, Mail, Facebook, Twitter, Instagram } from "lucide-react"
 import Image from "next/image"
 import footerLogo from "@/app/asstes/Logo.png"
 
@@ -20,10 +20,9 @@ const footerLinks = {
 }
 
 const socialLinks = [
-  { icon: Facebook, href: "#", label: "Facebook" },
+  { icon: Facebook, href: "https://www.facebook.com/share/1KaPLCPBSq/", label: "Facebook" },
   { icon: Twitter, href: "#", label: "Twitter" },
-  { icon: Instagram, href: "#", label: "Instagram" },
-  { icon: Linkedin, href: "#", label: "LinkedIn" },
+  { icon: Instagram, href: "https://www.instagram.com/green_homes_property/", label: "Instagram" },
 ]
 
 export function Footer() {
@@ -135,6 +134,8 @@ export function Footer() {
                   <motion.a
                     key={social.label}
                     href={social.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
                     initial={{ opacity: 0, scale: 0.8 }}
                     whileInView={{ opacity: 1, scale: 1 }}
                     transition={{ duration: 0.6 }}

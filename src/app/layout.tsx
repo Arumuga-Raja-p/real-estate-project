@@ -4,6 +4,7 @@ import "./globals.css";
 import { Navigation } from "@/components/layout/navigation";
 import { Footer } from "@/components/layout/footer";
 import EnquiryButton from "@/components/ui/EnquiryButton";
+import MobileWhatsAppButton from "@/components/ui/MobileWhatsAppButton";
 import SocialIconsComponent from "@/components/layout/socialMedia";
 import { absoluteUrl, defaultKeywords, siteConfig } from "@/lib/seo";
 
@@ -111,6 +112,7 @@ export default function RootLayout({
         <main className="min-h-screen">{children}</main>
         <Footer />
         <SocialIconsComponent/>
+        <MobileWhatsAppButton />
         <EnquiryButton />
       </body>
     </html>
