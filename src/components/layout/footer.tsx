@@ -15,7 +15,6 @@ const footerLinks = {
   ],
   services: [
     { href: "/properties", label: "Buy Property" },
-    { href: "/management", label: "Property Management" },
     { href: "/contact", label: "Consultation" },
   ],
 }

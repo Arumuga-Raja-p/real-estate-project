@@ -7,6 +7,9 @@ import EnquiryButton from "@/components/ui/EnquiryButton";
 import SocialIconsComponent from "@/components/layout/socialMedia";
 import { absoluteUrl, defaultKeywords, siteConfig } from "@/lib/seo";
 
+const faviconUrl =
+  "https://res.cloudinary.com/drisid7me/image/upload/v1777990710/green_favicon_u6wyou.png";
+
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -63,10 +66,10 @@ export const metadata: Metadata = {
     images: [absoluteUrl(siteConfig.ogImage)],
   },
   icons: {
-    icon: "/galary/green_favicon.png",
-    shortcut: "/galary/green_favicon.png",
-    apple: "/galary/green_favicon.png",
-    other: [{ rel: "icon", url: "/galary/green_favicon.png" }],
+    icon: faviconUrl,
+    shortcut: faviconUrl,
+    apple: faviconUrl,
+    other: [{ rel: "icon", url: faviconUrl }],
   },
 }
 

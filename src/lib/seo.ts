@@ -25,19 +25,24 @@ export const siteConfig = {
 export const defaultKeywords = [
   "Green Homes",
   "Green Homes Construction",
+  "Green Homes Property",
+  "Green Homes Chennai",
+  "Green Homes Guduvanchery",
+  "Green Homes Property Consultants",
   "real estate in Guduvanchery",
+  "real estate in Tamburam",
+  "real estate in Chennai",
+  "real estate agents in Guduvanchery",
   "real estate company in Guduvanchery",
   "best real estate company in Guduvanchery",
   "properties in Guduvanchery",
   "homes in Guduvanchery",
   "apartments in Guduvanchery",
   "villas in Guduvanchery",
-  "property management in Chennai",
   "real estate in Chennai",
   "property consultants in Chennai",
   "buy property in Chennai",
   "sell property in Chennai",
-  "rental properties in Chennai",
 ] as const
 
 export function absoluteUrl(path = "/") {

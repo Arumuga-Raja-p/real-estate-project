@@ -13,7 +13,7 @@ import { siteConfig } from "@/lib/seo"
 export const metadata: Metadata = {
   title: "Best Real Estate Company in Guduvanchery, Chennai",
   description:
-    "Explore Green Homes Construction for property buying, selling, rentals, and real estate services in Guduvanchery, Chennai.",
+    "Explore Green Homes Construction for property buying, selling, and real estate services in Guduvanchery, Chennai.",
   alternates: {
     canonical: "/",
   },

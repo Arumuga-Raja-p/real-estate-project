@@ -594,11 +594,6 @@ export default function ContactPage() {
                     "Our commission rates are competitive and transparent. We offer different packages based on your needs, starting from 2 to 2.5% for sellers.",
                 },
                 {
-                  question: "Do you offer property management services?",
-                  answer:
-                    "Yes! We offer comprehensive property management services including tenant screening, rent collection, maintenance, and more.",
-                },
-                {
                   question: "Can you help with investment properties?",
                   answer:
                     "We specialize in investment properties and can provide market analysis, ROI calculations, and ongoing investment advice.",

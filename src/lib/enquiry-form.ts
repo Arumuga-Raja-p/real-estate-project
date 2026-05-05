@@ -20,7 +20,6 @@ export const ENQUIRY_TYPE_OPTIONS = [
   { value: "buying", label: "Buying Property" },
   { value: "selling", label: "Selling Property" },
   { value: "construction", label: "Building Construction" },
-  { value: "management", label: "Property Management" },
   { value: "consultation", label: "Free Consultation" },
   { value: "other", label: "Other" },
 ];

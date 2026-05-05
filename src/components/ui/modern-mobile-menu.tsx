@@ -10,7 +10,6 @@ import {
   MessageCircle,
   MoreHorizontal,
   Phone,
-  Wrench,
 } from "lucide-react";
 
 import { cn } from "@/lib/utils";
@@ -40,7 +39,6 @@ const defaultItems: InteractiveMenuItem[] = [
   { label: "About", icon: Info, href: "/about" },
   { label: "Gallery", icon: Images, href: "/gallery" },
   { label: "Properties", icon: Building2, href: "/properties" },
-  { label: "Services", icon: Wrench, href: "/management" },
   { label: "Contact", icon: Phone, href: "/contact" },
 ];
 
@@ -187,7 +185,6 @@ const ModernMobileMenu: React.FC<ModernMobileMenuProps> = ({ onEnquire, classNam
   const moreItems = useMemo(
     () => [
       { label: "About", icon: Info, href: "/about" },
-      { label: "Services", icon: Wrench, href: "/management" },
       { label: "Contact", icon: Phone, href: "/contact" },
     ],
     [],

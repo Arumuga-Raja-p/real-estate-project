@@ -16,7 +16,6 @@ const inquiryTypeLabels: Record<string, string> = {
   sell: "Selling Property",
   selling: "Selling Property",
   construction: "Building Construction",
-  management: "Property Management",
   consultation: "Free Consultation",
   other: "Other",
 };

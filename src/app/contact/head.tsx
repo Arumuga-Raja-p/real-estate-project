@@ -3,7 +3,7 @@ import { absoluteUrl } from "@/lib/seo"
 export default function Head() {
   const title = "Contact Green Homes in Guduvanchery, Chennai"
   const description =
-    "Contact Green Homes Construction for property buying, selling, rentals, site visits, and real estate support in Guduvanchery, Chennai."
+    "Contact Green Homes Construction for property buying, selling, site visits, and real estate support in Guduvanchery, Chennai."
   const canonical = absoluteUrl("/contact")
   const keywords = [
     "contact Green Homes",
