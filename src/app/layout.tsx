@@ -84,7 +84,7 @@ export default function RootLayout({
     name: siteConfig.name,
     url: siteConfig.url,
     image: absoluteUrl(siteConfig.ogImage),
-    logo: absoluteUrl("/galary/green%20favicon.svg"),
+    logo: absoluteUrl(siteConfig.ogImage),
     description: siteConfig.description,
     telephone: siteConfig.phones,
     email: siteConfig.email,

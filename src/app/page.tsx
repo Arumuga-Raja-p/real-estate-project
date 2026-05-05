@@ -11,9 +11,9 @@ import { fetchPartnersSection } from "@/lib/partners"
 import { siteConfig } from "@/lib/seo"
 
 export const metadata: Metadata = {
-  title: "Best Real Estate Company in Guduvanchery, Chennai",
+  title: "Trusted Property Experts in Guduvanchery, Chennai",
   description:
-    "Explore Green Homes Construction for property buying, selling, and real estate services in Guduvanchery, Chennai.",
+    "Green Homes Construction helps you buy, sell, and invest in quality properties across Guduvanchery and Chennai with reliable guidance, local expertise, and transparent service.",
   alternates: {
     canonical: "/",
   },

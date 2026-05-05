@@ -30,7 +30,7 @@ export const defaultKeywords = [
   "Green Homes Guduvanchery",
   "Green Homes Property Consultants",
   "real estate in Guduvanchery",
-  "real estate in Tamburam",
+  "real estate in Tambaram",
   "real estate in Chennai",
   "real estate agents in Guduvanchery",
   "real estate company in Guduvanchery",
